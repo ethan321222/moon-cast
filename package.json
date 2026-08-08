@@ -1,0 +1,49 @@
+{
+  "name": "moon-cast",
+  "description": "MoonCast - A cross-platform file casting tool",
+  "version": "1.0.0",
+  "type": "module",
+  "license": "MIT",
+  "author": "ethan321222 <ethan321222@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ethan321222/moon-cast.git"
+  },
+  "homepage": "https://github.com/ethan321222/moon-cast",
+  "bugs": {
+    "url": "https://github.com/ethan321222/moon-cast/issues"
+  },
+  "keywords": ["tauri", "file-casting", "cross-platform", "lan", "file-sharing"],
+  "scripts": {
+    "dev": "npm run tauri dev",
+    "build": "npm run tauri build",
+    "dev:renderer": "vite",
+    "build:renderer": "vite build",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-dialog": "^2.7.2",
+    "@tauri-apps/plugin-opener": "^2",
+    "i18next": "^26.3.6",
+    "i18next-browser-languagedetector": "^8.2.1",
+    "qrcode": "^1.5.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-i18next": "^17.0.11",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@napi-rs/canvas": "^1.0.3",
+    "@tauri-apps/cli": "^2",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4"
+  }
+}

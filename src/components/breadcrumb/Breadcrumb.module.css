@@ -1,0 +1,33 @@
+.breadcrumb {
+  padding: 8px 16px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 13px;
+}
+
+.item {
+  display: inline;
+}
+
+.separator {
+  margin: 0 4px;
+  color: var(--color-text-secondary);
+}
+
+.link {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.current {
+  color: var(--color-text);
+  font-weight: 500;
+}

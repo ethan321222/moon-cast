@@ -1,0 +1,14 @@
+{
+  "image": {
+    "close": "关闭",
+    "prev": "上一张",
+    "next": "下一张"
+  },
+  "password": {
+    "hide": "隐藏密码",
+    "show": "显示密码"
+  },
+  "upload": {
+    "remove": "删除"
+  }
+}

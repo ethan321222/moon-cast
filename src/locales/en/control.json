@@ -1,0 +1,86 @@
+{
+  "nav": {
+    "overview": "Overview",
+    "settings": "Settings"
+  },
+  "brand": {
+    "subtitle": "File Mapping Tool",
+    "toggleTheme": "Toggle theme"
+  },
+  "dashboard": {
+    "startStop": "Start / Stop",
+    "loading": "Processing...",
+    "stop": "Stop",
+    "start": "Start",
+    "setRoot": "Set root directory...",
+    "addressDescription": "Access files in the root directory via these addresses",
+    "recentRequests": "Live Request Log",
+    "noRequests": "No requests yet"
+  },
+  "address": {
+    "local": "Local",
+    "lan": "LAN",
+    "tunnel": "Public",
+    "connecting": "Connecting...",
+    "connectFailed": "Connection failed",
+    "copy": "Copy",
+    "open": "Open",
+    "qr": "QR Code",
+    "status": {
+      "checking_cloudflared": "Checking cloudflared...",
+      "downloading_cloudflared": "Downloading cloudflared...",
+      "starting_tunnel": "Starting tunnel..."
+    }
+  },
+  "settings": {
+    "appearance": "Appearance",
+    "themeMode": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "language": "Language",
+    "langZh": "中文",
+    "langEn": "English",
+    "langSystem": "System",
+    "server": "Server",
+    "rootDir": "Root Directory",
+    "rootDirDesc": "Local folder path mapped to the web",
+    "rootDirSelect": "Select…",
+    "port": "Port",
+    "portDesc": "HTTP server listening port",
+    "bindAddr": "Bind Address",
+    "bindAddrDesc": "0.0.0.0 = all interfaces, 127.0.0.1 = localhost only",
+    "maxDepth": "Max Depth",
+    "maxDepthDesc": "Directory recursion depth, -1 for unlimited",
+    "showHidden": "Show Hidden Files",
+    "showHiddenDesc": "Show files starting with . in the file list",
+    "auth": "Authentication",
+    "authEnabled": "Enable Password",
+    "authEnabledDesc": "When enabled, WebDAV and web file browsing require authentication",
+    "authUser": "Username",
+    "authUserDesc": "Username required for access",
+    "authPass": "Password",
+    "authPassDesc": "Password required for access",
+    "authPassPlaceholder": "Enter password",
+    "webdav": "WebDAV",
+    "webdavEnabled": "Enable WebDAV",
+    "webdavEnabledDesc": "Allow mounting as a network drive via WebDAV protocol",
+    "webdavWarningTitle": "Enable WebDAV",
+    "webdavWarningBody": "WebDAV lets other clients mount this folder through the network. Without password authentication, MoonCast will only allow browsing and downloads.",
+    "webdavWarningReadonly": "Upload, delete, move, rename, folder creation, and other file operations require authentication and will be rejected in read-only mode.",
+    "webdavEnableReadonly": "Enable Read-only",
+    "webdavEnableWithAuth": "Enable Password and WebDAV",
+    "tunnel": "Public Access",
+    "tunnelEnabled": "Enable Tunnel",
+    "tunnelEnabledDesc": "Automatically expose to the internet via Cloudflare Tunnel on start",
+    "tunnelBinDir": "cloudflared Directory",
+    "tunnelBinDirDesc": "Auto-downloads if not present",
+    "tunnelBrowse": "Browse",
+    "logs": "Logs",
+    "logDir": "Log Directory",
+    "openDir": "Open Directory"
+  },
+  "qrModal": {
+    "title": "Scan to Access"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "header": {
+    "newFolder": "新建文件夹",
+    "switchToGrid": "切换到平铺",
+    "switchToDetail": "切换到详细信息",
+    "themeDark": "深色模式",
+    "themeLight": "浅色模式",
+    "upload": "上传文件",
+    "refresh": "刷新"
+  },
+  "list": {
+    "empty": "此文件夹为空",
+    "folders": "{{count}} 个文件夹",
+    "files": "{{count}} 个文件",
+    "folder": "文件夹"
+  },
+  "sort": {
+    "name": "名称",
+    "size": "大小",
+    "modified": "修改时间"
+  },
+  "action": {
+    "upload": {
+      "success": "已上传 {{name}}",
+      "error": "上传失败"
+    },
+    "delete": {
+      "confirm": "确定删除 \"{{name}}\"？",
+      "success": "已删除 {{name}}",
+      "error": "删除失败"
+    },
+    "rename": {
+      "success": "已重命名为 {{name}}",
+      "error": "重命名失败"
+    },
+    "mkdir": {
+      "success": "已创建文件夹 {{name}}",
+      "error": "创建失败"
+    }
+  },
+  "loadFailed": "加载失败",
+  "createFolder": {
+    "title": "新建文件夹",
+    "placeholder": "文件夹名称"
+  },
+  "contextMenu": {
+    "rename": "重命名",
+    "delete": "删除"
+  }
+}

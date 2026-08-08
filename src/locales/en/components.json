@@ -1,0 +1,14 @@
+{
+  "image": {
+    "close": "Close",
+    "prev": "Previous",
+    "next": "Next"
+  },
+  "password": {
+    "hide": "Hide password",
+    "show": "Show password"
+  },
+  "upload": {
+    "remove": "Remove"
+  }
+}

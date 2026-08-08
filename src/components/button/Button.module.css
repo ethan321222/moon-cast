@@ -1,0 +1,300 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: var(--spacing-xs) var(--spacing-lg);
+  border-radius: var(--radius-ctrl);
+  background: var(--color-ctrl-bg);
+  border: 1px solid var(--color-ctrl-border);
+  border-bottom-color: var(--color-ctrl-border-bottom);
+  color: var(--color-text);
+  font-size: var(--font-size-body);
+  font-weight: 400;
+  font-family: var(--font-family);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: none;
+  line-height: 1;
+}
+
+.btn:hover {
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent);
+}
+
+.btn:active {
+  background: var(--color-bg-active);
+  border-color: var(--color-accent-active);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: var(--color-ctrl-bg-disabled);
+  border-color: var(--color-ctrl-border);
+}
+
+/* ========== Variant ========== */
+
+/* solid */
+.btn.solid {
+  border-bottom-color: transparent;
+}
+
+.btn.solid:hover {
+  border-bottom-color: var(--color-accent);
+}
+
+.btn.solid:active {
+  border-bottom-color: var(--color-accent-active);
+}
+
+/* outlined - 默认 */
+.btn.outlined {
+  background: var(--color-ctrl-bg);
+}
+
+.btn.outlined:hover {
+  background: var(--color-accent-subtle);
+}
+
+/* dashed */
+.btn.dashed {
+  background: var(--color-ctrl-bg);
+  border-style: dashed;
+}
+
+.btn.dashed:hover {
+  background: var(--color-accent-subtle);
+}
+
+/* filled */
+.btn.filled {
+  background: var(--color-ctrl-bg-secondary);
+  border-color: var(--color-border-strong);
+  border-bottom-color: var(--color-ctrl-border-bottom);
+}
+
+.btn.filled:hover {
+  background: var(--color-accent-subtle);
+}
+
+/* text */
+.btn.text {
+  background: transparent;
+  border-color: transparent;
+  color: var(--color-text);
+}
+
+.btn.text:hover {
+  background: var(--color-accent-subtle);
+  border-color: transparent;
+}
+
+/* link */
+.btn.link {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--color-accent);
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.btn.link:hover {
+  color: var(--color-accent-active);
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+.btn.link:active {
+  color: var(--color-accent-active);
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+.btn.link:disabled {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+/* ========== Color ========== */
+
+/* primary */
+.btn.colorPrimary.solid {
+  background: var(--color-accent);
+  border-color: var(--color-accent-border);
+  border-bottom-color: var(--color-accent-border-bottom);
+  color: var(--color-text-on-accent);
+}
+
+.btn.colorPrimary.solid:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-active);
+}
+
+.btn.colorPrimary.solid:active {
+  background: var(--color-accent-active);
+  border-color: var(--color-accent-active);
+}
+
+.btn.colorPrimary.outlined {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.btn.colorPrimary.outlined:hover {
+  background: var(--color-accent-subtle);
+}
+
+.btn.colorPrimary.link,
+.btn.colorPrimary.text {
+  color: var(--color-accent);
+}
+
+/* danger */
+.btn.colorDanger.solid {
+  background: var(--color-danger);
+  border-color: var(--color-danger-hover);
+  border-bottom-color: var(--color-danger-border-bottom);
+  color: var(--color-text-on-accent);
+}
+
+.btn.colorDanger.solid:hover {
+  background: var(--color-danger-hover);
+  border-color: var(--color-danger-border-bottom);
+}
+
+.btn.colorDanger.outlined {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+  border-bottom-color: var(--color-danger-hover);
+}
+
+.btn.colorDanger.outlined:hover {
+  background: var(--color-danger-subtle);
+  border-color: var(--color-danger);
+}
+
+.btn.colorDanger.link,
+.btn.colorDanger.text {
+  color: var(--color-danger);
+}
+
+/* ========== Shape ========== */
+
+.circle {
+  min-width: var(--height-ctrl);
+  padding: 0;
+  border-radius: 50%;
+}
+
+.round {
+  border-radius: var(--radius-pill);
+}
+
+.square {
+  min-width: var(--height-ctrl);
+  padding: 0;
+  border-radius: 0;
+}
+
+/* ========== Ghost ========== */
+
+.ghost {
+  background: transparent;
+  border-color: currentColor;
+}
+
+.ghost:hover {
+  background: var(--color-accent-subtle);
+  border-color: var(--color-accent);
+}
+
+/* ========== Block ========== */
+
+.block {
+  width: 100%;
+}
+
+/* ========== Size ========== */
+
+.sm {
+  padding: 2px 10px;
+  font-size: var(--font-size-caption);
+  height: var(--height-ctrl-sm);
+}
+
+.btn.sm.iconOnly {
+  width: var(--height-ctrl-sm);
+  padding: 0;
+}
+
+.lg {
+  padding: 6px 20px;
+  font-size: var(--font-size-body-lg);
+  height: var(--height-ctrl-lg);
+}
+
+.btn.lg.iconOnly {
+  width: var(--height-ctrl-lg);
+  padding: 0;
+}
+
+/* ========== Icon ========== */
+
+.btn.iconOnly {
+  width: var(--height-ctrl);
+  height: var(--height-ctrl);
+  padding: 0;
+  aspect-ratio: 1;
+  flex-shrink: 0;
+}
+
+.iconEnd {
+  flex-direction: row-reverse;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.sm .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.lg .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* ========== Loading ========== */
+
+.loading {
+  opacity: 0.65;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.loadingIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

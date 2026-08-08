@@ -1,0 +1,15 @@
+[build]
+# 并行编译任务数（默认核心数的一半，避免 OOM）
+# Windows 获取逻辑核心数: wmic cpu get NumberOfLogicalProcessors
+# 或 PowerShell: (Get-CimInstance Win32_Processor).NumberOfLogicalProcessors
+jobs = 11
+
+[profile.dev]
+# dev 模式跳过优化，加速编译
+opt-level = 0
+# 增量编译（默认开启，显式声明确保不被覆盖）
+incremental = true
+
+[profile.dev.package."*"]
+# 第三方依赖用 opt-level 1，平衡编译速度和运行性能
+opt-level = 1

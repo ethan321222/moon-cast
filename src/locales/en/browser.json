@@ -1,0 +1,50 @@
+{
+  "header": {
+    "newFolder": "New Folder",
+    "switchToGrid": "Switch to grid",
+    "switchToDetail": "Switch to detail",
+    "themeDark": "Dark mode",
+    "themeLight": "Light mode",
+    "upload": "Upload",
+    "refresh": "Refresh"
+  },
+  "list": {
+    "empty": "This folder is empty",
+    "folders": "{{count}} folder(s)",
+    "files": "{{count}} file(s)",
+    "folder": "Folder"
+  },
+  "sort": {
+    "name": "Name",
+    "size": "Size",
+    "modified": "Modified"
+  },
+  "action": {
+    "upload": {
+      "success": "Uploaded {{name}}",
+      "error": "Upload failed"
+    },
+    "delete": {
+      "confirm": "Delete \"{{name}}\"?",
+      "success": "Deleted {{name}}",
+      "error": "Delete failed"
+    },
+    "rename": {
+      "success": "Renamed to {{name}}",
+      "error": "Rename failed"
+    },
+    "mkdir": {
+      "success": "Created folder {{name}}",
+      "error": "Failed to create folder"
+    }
+  },
+  "loadFailed": "Failed to load",
+  "createFolder": {
+    "title": "New Folder",
+    "placeholder": "Folder name"
+  },
+  "contextMenu": {
+    "rename": "Rename",
+    "delete": "Delete"
+  }
+}

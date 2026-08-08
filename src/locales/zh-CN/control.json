@@ -1,0 +1,86 @@
+{
+  "nav": {
+    "overview": "首页",
+    "settings": "设置"
+  },
+  "brand": {
+    "subtitle": "文件映射工具",
+    "toggleTheme": "切换主题"
+  },
+  "dashboard": {
+    "startStop": "启动 / 停止",
+    "loading": "处理中...",
+    "stop": "停止",
+    "start": "启动",
+    "setRoot": "设置根目录...",
+    "addressDescription": "你可以通过以下网络地址访问根目录中的文件",
+    "recentRequests": "实时请求日志",
+    "noRequests": "暂无请求记录"
+  },
+  "address": {
+    "local": "本机",
+    "lan": "局域网",
+    "tunnel": "公网",
+    "connecting": "连接中...",
+    "connectFailed": "连接失败",
+    "copy": "复制",
+    "open": "打开",
+    "qr": "二维码",
+    "status": {
+      "checking_cloudflared": "正在检测 cloudflared...",
+      "downloading_cloudflared": "正在下载 cloudflared...",
+      "starting_tunnel": "正在启动隧道..."
+    }
+  },
+  "settings": {
+    "appearance": "外观",
+    "themeMode": "主题模式",
+    "themeLight": "浅色",
+    "themeDark": "深色",
+    "themeSystem": "跟随系统",
+    "language": "显示语言",
+    "langZh": "中文",
+    "langEn": "English",
+    "langSystem": "跟随系统",
+    "server": "服务",
+    "rootDir": "根目录",
+    "rootDirDesc": "映射到 Web 的本地文件夹路径",
+    "rootDirSelect": "选择…",
+    "port": "端口",
+    "portDesc": "HTTP 服务监听端口",
+    "bindAddr": "绑定地址",
+    "bindAddrDesc": "0.0.0.0 = 所有网卡，127.0.0.1 = 仅本机",
+    "maxDepth": "最大深度",
+    "maxDepthDesc": "目录递归深度，-1 为不限制",
+    "showHidden": "显示隐藏文件",
+    "showHiddenDesc": "在文件列表中显示以 . 开头的文件",
+    "auth": "访问认证",
+    "authEnabled": "启用密码",
+    "authEnabledDesc": "开启后 WebDAV 和网页文件浏览均需验证密码",
+    "authUser": "用户名",
+    "authUserDesc": "访问时需要输入的用户名",
+    "authPass": "密码",
+    "authPassDesc": "访问时需要输入的密码",
+    "authPassPlaceholder": "请输入密码",
+    "webdav": "WebDAV",
+    "webdavEnabled": "启用 WebDAV",
+    "webdavEnabledDesc": "允许通过 WebDAV 协议挂载为网络磁盘",
+    "webdavWarningTitle": "启用 WebDAV",
+    "webdavWarningBody": "WebDAV 会允许其他客户端通过网络挂载当前目录。未启用密码认证时，MoonCast 只允许浏览和下载。",
+    "webdavWarningReadonly": "上传、删除、移动、重命名、新建文件夹等文件操作需要认证；只读模式下这些请求会被拒绝。",
+    "webdavEnableReadonly": "只读启用",
+    "webdavEnableWithAuth": "启用密码并启用",
+    "tunnel": "公网访问",
+    "tunnelEnabled": "启用隧道",
+    "tunnelEnabledDesc": "服务启动时自动通过 Cloudflare Tunnel 暴露到公网",
+    "tunnelBinDir": "cloudflared 目录",
+    "tunnelBinDirDesc": "软件不存在时自动下载",
+    "tunnelBrowse": "浏览",
+    "logs": "日志",
+    "logDir": "日志目录",
+    "openDir": "打开目录"
+  },
+  "qrModal": {
+    "title": "扫码访问"
+  }
+}

@@ -1,0 +1,96 @@
+.panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 24px;
+}
+
+/* 背景光晕 */
+.glow {
+  position: absolute;
+  top: -40%;
+  right: 0;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--moon-soft), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.running .glow {
+  opacity: 1;
+}
+
+/* 轨道 */
+.orbit {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px dashed var(--color-border-strong);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: border-color 0.4s;
+  position: relative;
+  z-index: 1;
+}
+
+.running .orbit {
+  border-color: var(--moon);
+  animation: orbit-spin 18s linear infinite;
+}
+
+@keyframes orbit-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 月亮按钮 */
+.moonBtn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-bg-sunken);
+  border: 1px solid var(--color-border);
+  display: grid;
+  place-items: center;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.moonBtn svg {
+  width: 30px;
+  height: 30px;
+  transition: all 0.35s;
+}
+
+.moonBtn:hover {
+  transform: scale(1.05);
+}
+
+.moonBtn:active {
+  transform: scale(0.96);
+}
+
+.moonBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.running .moonBtn {
+  background: radial-gradient(circle at 35% 30%, #fff5d6, var(--moon) 55%, #8a6010);
+  border-color: transparent;
+  color: #1a1000;
+  box-shadow: 0 0 18px var(--moon-soft);
+  animation: moon-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes moon-pulse {
+  0%, 100% { box-shadow: 0 0 12px var(--moon-soft); }
+  50% { box-shadow: 0 0 22px rgba(232, 160, 32, 0.25); }
+}

@@ -1,0 +1,157 @@
+/* ========== Track ========== */
+
+.switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  height: 22px;
+  padding: 2px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background 0.2s;
+  box-sizing: border-box;
+  outline: none;
+  vertical-align: middle;
+  user-select: none;
+}
+
+.switch:hover:not(.disabled):not(.loading) {
+  opacity: 0.85;
+}
+
+.switch:active:not(.disabled):not(.loading) .handle::before {
+  transform: scaleX(0.85);
+}
+
+/* ========== Checked ========== */
+
+.checked {
+  background: var(--color-accent);
+}
+
+/* ========== Disabled / Loading ========== */
+
+.disabled,
+.loading {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ========== Handle ========== */
+
+.handle {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s;
+  z-index: 1;
+}
+
+.handle::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color-text-on-accent);
+  border-radius: 50%;
+  box-shadow: var(--shadow-tooltip);
+  transition: transform 0.2s;
+}
+
+.checked .handle {
+  transform: translateX(22px);
+}
+
+/* ========== Loading Icon ========== */
+
+.loadingIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-border-strong);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: switchSpin 0.6s linear infinite;
+}
+
+@keyframes switchSpin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* ========== Inner (checkedChildren / unCheckedChildren) ========== */
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  overflow: hidden;
+  color: var(--color-text-on-accent);
+  font-size: var(--font-size-body);
+  line-height: 1;
+  transition: margin 0.2s;
+}
+
+.innerChecked,
+.innerUnchecked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding: 0 6px;
+}
+
+/* 未选中：显示 unCheckedChildren，隐藏 checkedChildren */
+.inner {
+  margin-left: 18px;
+  margin-right: -4px;
+}
+
+/* 选中：显示 checkedChildren，隐藏 unCheckedChildren */
+.checked .inner {
+  margin-left: -4px;
+  margin-right: 18px;
+}
+
+/* ========== Small ========== */
+
+.small {
+  min-width: 28px;
+  height: 16px;
+  padding: 2px;
+}
+
+.small .handle {
+  width: 12px;
+  height: 12px;
+}
+
+.checked.small .handle {
+  transform: translateX(14px);
+}
+
+.small .inner {
+  margin-left: 14px;
+  margin-right: -4px;
+}
+
+.small .innerChecked,
+.small .innerUnchecked {
+  font-size: 10px;
+  padding: 0 4px;
+}
+
+.checked.small .inner {
+  margin-left: -4px;
+  margin-right: 14px;
+}
