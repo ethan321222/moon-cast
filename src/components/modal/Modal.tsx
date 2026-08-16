@@ -1,4 +1,4 @@
-import { useEffect, useCallback, type ReactNode, forwardRef } from "react";
+import { useEffect, useCallback, type CSSProperties, type ReactNode, forwardRef } from "react";
 import styles from "./Modal.module.css";
 
 export interface ModalProps {
@@ -60,18 +60,21 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
 
     const maskCls = [styles.mask, !centered && styles.maskTop].filter(Boolean).join(" ");
     const cls = [styles.modal, className].filter(Boolean).join(" ");
+    const modalStyle = {
+      "--modal-width": typeof width === "number" ? `${width}px` : width,
+    } as CSSProperties;
 
     return (
       <div className={maskCls} onClick={handleMaskClick}>
         <div
           ref={ref}
           className={cls}
-          style={{ width: typeof width === "number" ? `${width}px` : width }}
+          style={modalStyle}
         >
           {title && (
             <div className={styles.header}>
               <div className={styles.title}>{title}</div>
-              <button className={styles.close} onClick={onClose}>
+              <button type="button" className={styles.close} onClick={onClose} aria-label="Close">
                 ✕
               </button>
             </div>

@@ -46,9 +46,9 @@ export const CreateFolderModal = forwardRef<CreateFolderModalRef, CreateFolderMo
           onKeyDown={(e) => e.key === "Enter" && handleCreate()}
           autoFocus
         />
-        <div className="flex items-center justify-end gap-2 mt-4">
-          <Button type="primary" onClick={handleCreate}>{t("common:create")}</Button>
+        <div className="flex flex-wrap items-center justify-end gap-2 mt-4 w-full">
           <Button onClick={handleClose}>{t("common:cancel")}</Button>
+          <Button type="primary" onClick={handleCreate} disabled={!name.trim()}>{t("common:create")}</Button>
         </div>
       </Modal>
     );

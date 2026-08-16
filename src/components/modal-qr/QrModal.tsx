@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import QRCode from "qrcode";
 import Modal from "../modal";
+import Button from "../button";
 
 export type QrType = "canvas" | "img";
 
@@ -49,24 +50,24 @@ export function QrModal({ url, visible, onClose, type = "canvas" }: QrModalProps
 
   return (
     <Modal open={visible} onClose={onClose} title={t("qrModal.title")} width={340}>
-      {type === "canvas" ? (
-        <canvas ref={canvasRef} className="rounded-lg block max-w-full max-h-full object-contain min-h-0 shrink" />
-      ) : (
-        dataUrl && (
-          <img
-            src={dataUrl}
-            alt="QR Code"
-            className="rounded-lg mx-auto block max-w-full h-auto"
-          />
+      <div className="flex w-full flex-col items-center">
+        {type === "canvas" ? (
+          <canvas ref={canvasRef} className="rounded-lg block max-w-full h-auto object-contain" />
+        ) : (
+          dataUrl && (
+            <img
+              src={dataUrl}
+              alt="QR Code"
+              className="rounded-lg block max-w-full h-auto"
+            />
+          )
         )
-      )}
-      <div className="mt-3 text-xs text-[var(--color-text-secondary)] text-center break-all mx-auto">{url}</div>
-      <button
-        className="block mx-auto mt-3 px-4 py-1.5 bg-[var(--color-primary)] text-white border-none rounded-md cursor-pointer text-sm hover:opacity-90"
-        onClick={copyUrl}
-      >
-        {t("common:copyLink")}
-      </button>
+        }
+        <div className="mt-3 w-full text-xs text-[var(--color-text-secondary)] text-center break-all">{url}</div>
+        <Button type="primary" className="mt-3" onClick={copyUrl}>
+          {t("common:copyLink")}
+        </Button>
+      </div>
     </Modal>
   );
 }
