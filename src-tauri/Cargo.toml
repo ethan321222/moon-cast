@@ -43,3 +43,6 @@ rust-embed = { version = "8.12.0", features = ["include-exclude"] }
 reqwest = { version = "0.12", features = ["rustls-tls", "stream"], default-features = false }
 opener = "0.7"
 
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
