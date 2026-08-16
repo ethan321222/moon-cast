@@ -1,7 +1,7 @@
 {
   "name": "moon-cast",
   "description": "MoonCast - A cross-platform file casting tool",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "license": "MIT",
   "author": "ethan321222 <ethan321222@gmail.com>",

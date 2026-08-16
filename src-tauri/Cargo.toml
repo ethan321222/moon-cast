@@ -1,6 +1,6 @@
 [package]
 name = "moon-cast"
-version = "1.0.0"
+version = "1.0.2"
 description = "MoonCast - A cross-platform file casting tool"
 authors = ["ethan321222 <ethan321222@gmail.com>"]
 license = "MIT"
