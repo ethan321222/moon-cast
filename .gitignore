@@ -13,6 +13,7 @@ node_modules
 # Build output
 dist
 dist-ssr
+release-assets
 
 # Env files
 *.local

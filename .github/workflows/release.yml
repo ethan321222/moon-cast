@@ -34,11 +34,11 @@ jobs:
           name: MoonCast ${{ github.ref_name }}
           generate_release_notes: false
           body: |
-            ## 下载
+            ## Download
 
             - **macOS**: `MoonCast-${{ github.ref_name }}-macOS.dmg`
             - **Windows（Setup）**: `MoonCast-${{ github.ref_name }}-Windows-setup.exe`
             - **Windows（MSI）**: `MoonCast-${{ github.ref_name }}-Windows.msi`
-            - **Windows（Portable）**: `MoonCast-${{ github.ref_name }}-Windows-Portable.zip`（解压即用）
+            - **Windows（Portable）**: `MoonCast-${{ github.ref_name }}-Windows-Portable.zip` (unzip and run)
             - **Linux**: `MoonCast-${{ github.ref_name }}-Linux-x86_64.AppImage` / `.deb`
           files: release-assets/*

@@ -21,7 +21,8 @@
     "build:renderer": "vite build",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "build:windows": "node scripts/build-windows.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

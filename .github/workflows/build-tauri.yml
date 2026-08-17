@@ -130,8 +130,6 @@ jobs:
             $portableDir = "release-assets/_portable"
             New-Item -ItemType Directory -Force -Path $portableDir | Out-Null
             Copy-Item $exePath $portableDir
-            $resDir = "src-tauri/target/${{ matrix.rust-targets }}/release/resources"
-            if (Test-Path $resDir) { Copy-Item -Recurse $resDir $portableDir }
             Compress-Archive -Path "$portableDir/*" -DestinationPath "release-assets/$PREFIX-Portable.zip" -Force
             Remove-Item -Recurse -Force $portableDir
             Write-Host "Portable: $PREFIX-Portable.zip"
