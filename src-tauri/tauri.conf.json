@@ -38,7 +38,8 @@
     ],
     "windows": {
       "nsis": {
-        "compression": "lzma"
+        "compression": "lzma",
+        "installerIcon": "icons/icon.ico"
       }
     },
     "createUpdaterArtifacts": false
