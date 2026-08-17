@@ -1,0 +1,200 @@
+name: Build Tauri
+
+on:
+  workflow_call:
+    inputs:
+      release:
+        description: "Use tauri-action for full release build and prepare assets"
+        type: boolean
+        default: false
+    outputs:
+      artifact-name:
+        description: "Name of the uploaded artifact (release only)"
+        value: ${{ jobs.build.outputs.artifact-name }}
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: ubuntu-22.04
+            rust-targets: x86_64-unknown-linux-gnu
+            os: Linux
+            arch: x86_64
+          - platform: macos-latest
+            rust-targets: universal-apple-darwin
+            os: macOS
+            arch: universal
+          - platform: windows-latest
+            rust-targets: x86_64-pc-windows-msvc
+            os: Windows
+            arch: x86_64
+
+    runs-on: ${{ matrix.platform }}
+    outputs:
+      artifact-name: release-assets-${{ matrix.os }}-${{ matrix.arch }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri -> target
+
+      - name: Cache Linux dependencies
+        if: runner.os == 'Linux'
+        uses: actions/cache@v4
+        with:
+          path: |
+            /var/cache/apt
+            /var/lib/apt
+          key: linux-deps-${{ matrix.platform }}
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            librsvg2-dev \
+            patchelf \
+            libgtk-3-dev \
+            libayatana-appindicator3-dev
+
+      - name: Add macOS targets
+        if: runner.os == 'macOS'
+        run: rustup target add aarch64-apple-darwin x86_64-apple-darwin
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      # CI: compile check
+      - name: Build Tauri app (compile check)
+        if: ${{ !inputs.release }}
+        run: npx tauri build --target ${{ matrix.rust-targets }}
+
+      # Release: full bundle via tauri-action
+      - name: Build Tauri app (full bundle)
+        if: ${{ inputs.release }}
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: --target ${{ matrix.rust-targets }}
+          tauriScript: npx tauri
+
+      # ----- Release: 各平台资产准备 -----
+      - name: Prepare Windows Assets
+        if: ${{ inputs.release && runner.os == 'Windows' }}
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force -Path release-assets | Out-Null
+          $VERSION = "${{ github.ref_name }}"
+          $PREFIX = "MoonCast-$VERSION-Windows"
+
+          # NSIS installer
+          $nsis = Get-ChildItem -Path "src-tauri/target/${{ matrix.rust-targets }}/release/bundle/nsis" -Filter *.exe -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($null -ne $nsis) {
+            Copy-Item $nsis.FullName "release-assets/$PREFIX-setup.exe"
+            Write-Host "Installer: $PREFIX-setup.exe"
+          } else {
+            throw "NSIS installer not found"
+          }
+
+          # MSI installer
+          $msi = Get-ChildItem -Path "src-tauri/target/${{ matrix.rust-targets }}/release/bundle/msi" -Filter *.msi -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($null -ne $msi) {
+            Copy-Item $msi.FullName "release-assets/$PREFIX.msi"
+            Write-Host "MSI: $PREFIX.msi"
+          } else {
+            throw "MSI installer not found"
+          }
+
+          # Portable zip
+          $exePath = "src-tauri/target/${{ matrix.rust-targets }}/release/moon-cast.exe"
+          if (Test-Path $exePath) {
+            $portableDir = "release-assets/_portable"
+            New-Item -ItemType Directory -Force -Path $portableDir | Out-Null
+            Copy-Item $exePath $portableDir
+            $resDir = "src-tauri/target/${{ matrix.rust-targets }}/release/resources"
+            if (Test-Path $resDir) { Copy-Item -Recurse $resDir $portableDir }
+            Compress-Archive -Path "$portableDir/*" -DestinationPath "release-assets/$PREFIX-Portable.zip" -Force
+            Remove-Item -Recurse -Force $portableDir
+            Write-Host "Portable: $PREFIX-Portable.zip"
+          } else {
+            throw "Portable exe not found"
+          }
+
+      - name: Prepare macOS Assets
+        if: ${{ inputs.release && runner.os == 'macOS' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release-assets
+          VERSION="${{ github.ref_name }}"
+          PREFIX="MoonCast-${VERSION}-macOS"
+
+          DMG=$(find src-tauri/target/${{ matrix.rust-targets }}/release/bundle -name "*.dmg" -type f | head -1 || true)
+          if [ -n "$DMG" ]; then
+            cp "$DMG" "release-assets/${PREFIX}.dmg"
+            echo "DMG: ${PREFIX}.dmg"
+          else
+            echo "::error::macOS DMG not found" && exit 1
+          fi
+
+      - name: Prepare Linux Assets
+        if: ${{ inputs.release && runner.os == 'Linux' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release-assets
+          VERSION="${{ github.ref_name }}"
+          PREFIX="MoonCast-${VERSION}-Linux-${{ matrix.arch }}"
+
+          APPIMAGE=$(find src-tauri/target/${{ matrix.rust-targets }}/release/bundle -name "*.AppImage" -type f | head -1 || true)
+          if [ -n "$APPIMAGE" ]; then
+            cp "$APPIMAGE" "release-assets/${PREFIX}.AppImage"
+            echo "AppImage: ${PREFIX}.AppImage"
+          else
+            echo "::error::Linux AppImage not found" && exit 1
+          fi
+
+          DEB=$(find src-tauri/target/${{ matrix.rust-targets }}/release/bundle -name "*.deb" -type f | head -1 || true)
+          if [ -n "$DEB" ]; then
+            cp "$DEB" "release-assets/${PREFIX}.deb"
+            echo "Deb: ${PREFIX}.deb"
+          else
+            echo "::error::Linux deb not found" && exit 1
+          fi
+
+      - name: List generated bundles (debug)
+        if: ${{ inputs.release && always() }}
+        shell: bash
+        run: |
+          echo "=== Bundle directory ==="
+          find src-tauri/target -path "*/release/bundle/*" -type f 2>/dev/null || echo "No bundles found"
+          echo ""
+          echo "=== Release assets ==="
+          ls -la release-assets/ 2>/dev/null || echo "No release-assets directory"
+
+      - name: Upload release assets
+        if: ${{ inputs.release }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets-${{ matrix.os }}-${{ matrix.arch }}
+          path: release-assets/*
+          if-no-files-found: error

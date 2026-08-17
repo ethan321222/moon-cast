@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-tauri.yml
+    with:
+      release: true
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: release-assets-*
+          path: release-assets
+          merge-multiple: true
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: MoonCast ${{ github.ref_name }}
+          generate_release_notes: false
+          body: |
+            ## 下载
+
+            - **macOS**: `MoonCast-${{ github.ref_name }}-macOS.dmg`
+            - **Windows（Setup）**: `MoonCast-${{ github.ref_name }}-Windows-setup.exe`
+            - **Windows（MSI）**: `MoonCast-${{ github.ref_name }}-Windows.msi`
+            - **Windows（Portable）**: `MoonCast-${{ github.ref_name }}-Windows-Portable.zip`（解压即用）
+            - **Linux**: `MoonCast-${{ github.ref_name }}-Linux-x86_64.AppImage` / `.deb`
+          files: release-assets/*
