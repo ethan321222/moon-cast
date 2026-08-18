@@ -87,6 +87,7 @@ pub async fn start_server(
 
     // Emit LAN addresses one by one
     let ips = net::local_ips();
+    logger::log(&format!("[IPC] local_ips result: {:?}", ips));
     for ip in &ips {
         let _ = app_handle.emit("address-ready", AddressEvent {
             id: format!("lan-{}", ip),
