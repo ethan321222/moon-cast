@@ -6,7 +6,7 @@ import type {
   LanAddress,
   TunnelStatus,
   BinaryStatus,
-} from "../types";
+} from "@/types";
 
 // ==================== 目录 API ====================
 

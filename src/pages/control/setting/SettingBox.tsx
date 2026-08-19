@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Card } from "../../../components/card";
+import { Card } from "@/components/card";
 
 interface SettingBoxProps {
   title: string;

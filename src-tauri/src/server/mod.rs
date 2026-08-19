@@ -5,10 +5,12 @@ pub mod spa;
 
 use axum::Router;
 use axum::body::Body;
-use axum::extract::State;
-use axum::http::{Request, Response};
+use axum::extract::{State, Path as AxumPath};
+use axum::http::{Request, Response, StatusCode};
 use axum::middleware::Next;
-use axum::routing::{any, get};
+use axum::response::{IntoResponse, Json};
+use axum::routing::{any, get, post};
+use serde_json::json;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use std::time::Duration;
@@ -18,6 +20,7 @@ use tower_http::cors::CorsLayer;
 use config::ServerConfig;
 use handlers::AppState;
 use crate::utils::logging::{self, LogTarget};
+use crate::utils::power::{self, PowerAction};
 use crate::utils::webdav::{WebDav, WebDavConfig};
 
 /// 优雅关闭的宽限期。超时后强制中止。
@@ -141,12 +144,67 @@ fn unauthorized_response() -> Response<Body> {
         .expect("building 401 response")
 }
 
+/// 电源控制 handler：POST /utils/power/:action
+async fn handle_power(
+    axum::extract::State(log_target): axum::extract::State<LogTarget>,
+    AxumPath(action): AxumPath<String>,
+) -> Response<Body> {
+    let now = chrono::Local::now().format("%Y-%m-%d %H:%M:%S");
+    match PowerAction::from_str(&action) {
+        Some(power_action) => match power::execute(power_action) {
+            Ok(()) => {
+                let line = format!("[{}] [Power] executed: {}", now, action);
+                match &log_target {
+                    LogTarget::Stdout => println!("{}", line),
+                    LogTarget::Off => {}
+                    LogTarget::Channel(tx) => { let _ = tx.send(line); }
+                }
+                Json(json!({ "ok": true })).into_response()
+            }
+            Err(e) => {
+                let line = format!("[{}] [Power] failed: {} - {}", now, action, e);
+                match &log_target {
+                    LogTarget::Stdout => eprintln!("{}", line),
+                    LogTarget::Off => {}
+                    LogTarget::Channel(tx) => { let _ = tx.send(line); }
+                }
+                Response::builder()
+                    .status(StatusCode::INTERNAL_SERVER_ERROR)
+                    .header("content-type", "application/json")
+                    .body(Body::from(json!({ "error": e }).to_string()))
+                    .expect("building error response")
+            }
+        },
+        None => {
+            let line = format!("[{}] [Power] unknown action: {}", now, action);
+            match &log_target {
+                LogTarget::Stdout => eprintln!("{}", line),
+                LogTarget::Off => {}
+                LogTarget::Channel(tx) => { let _ = tx.send(line); }
+            }
+            Response::builder()
+                .status(StatusCode::BAD_REQUEST)
+                .header("content-type", "application/json")
+                .body(Body::from(
+                    json!({ "error": format!("unknown action: {}", action) }).to_string(),
+                ))
+                .expect("building 400 response")
+        }
+    }
+}
+
 /// 组装 Axum 路由器，应用所有中间件层。
 pub fn build_router(state: Arc<AppState>, log_target: LogTarget) -> Router {
     let webdav_enabled = state.webdav;
     let auth_state = state.clone();
 
+    // 电源控制子路由，使用 LogTarget 作为 state
+    let power_router = Router::new()
+        .route("/utils/power/{action}", post(handle_power))
+        .with_state(log_target.clone());
+
     let mut app = Router::new()
+        .merge(power_router)
         .route("/", get(handlers::serve_index))
         .route("/{*path}", get(handlers::serve_path));
 

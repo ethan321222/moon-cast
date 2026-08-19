@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { listen } from "@tauri-apps/api/event";
-import type { ServerConfig, ServerStatus, AddressEntry } from "../../../types";
+import type { ServerConfig, ServerStatus, AddressEntry } from "@/types";
 import {
   startServer,
   stopServer,
   getServerStatus,
   readLogs,
-} from "../../../api/client";
-import { translateError } from "../../../utils/i18n-error";
-import i18n from "../../../locales";
+} from "@/api/client";
+import { translateError } from "@/utils/i18n-error";
+import i18n from "@/locales";
 
 interface UseServerLifecycleOptions {
   config: ServerConfig | null;

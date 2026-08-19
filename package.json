@@ -1,7 +1,7 @@
 {
   "name": "moon-cast",
   "description": "MoonCast - A cross-platform file casting tool",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "license": "MIT",
   "author": "ethan321222 <ethan321222@gmail.com>",
@@ -13,7 +13,13 @@
   "bugs": {
     "url": "https://github.com/ethan321222/moon-cast/issues"
   },
-  "keywords": ["tauri", "file-casting", "cross-platform", "lan", "file-sharing"],
+  "keywords": [
+    "tauri",
+    "file-casting",
+    "cross-platform",
+    "lan",
+    "file-sharing"
+  ],
   "scripts": {
     "dev": "npm run tauri dev",
     "build": "npm run tauri build",

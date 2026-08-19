@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import QRCode from "qrcode";
-import Modal from "../modal";
-import Button from "../button";
+import Modal from "@/components/modal";
+import Button from "@/components/button";
 
 export type QrType = "canvas" | "img";
 

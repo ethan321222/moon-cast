@@ -2,7 +2,7 @@ import { useEffect, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import type { PreviewProps } from "./interface";
 import styles from "./Image.module.css";
-import Button from "../button";
+import Button from "@/components/button";
 
 export function Preview({
   open,

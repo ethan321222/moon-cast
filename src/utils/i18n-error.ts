@@ -1,4 +1,4 @@
-import i18n from "../locales";
+import i18n from "@/locales";
 
 /**
  * Translates a backend error code string to a user-facing message.

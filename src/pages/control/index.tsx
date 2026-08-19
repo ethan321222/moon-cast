@@ -1,16 +1,16 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import type { ServerConfig } from "../../types";
-import { QrModal } from "../../components/modal-qr";
-import { Menu } from "../../components/menu";
-import type { ItemType } from "../../components/menu";
-import { Button } from "../../components/button";
-import { useTheme, initTheme } from "../../hooks/useTheme";
-import { useLocalStorageDraft } from "../../hooks/useLocalStorageDraft";
+import type { ServerConfig } from "@/types";
+import { QrModal } from "@/components/modal-qr";
+import { Menu } from "@/components/menu";
+import type { ItemType } from "@/components/menu";
+import { Button } from "@/components/button";
+import { useTheme, initTheme } from "@/hooks/useTheme";
+import { useLocalStorageDraft } from "@/hooks/useLocalStorageDraft";
 import { useServerLifecycle } from "./hooks/useServerLifecycle";
 import { Dashboard } from "./dashboard";
 import { Setting } from "./setting";
-import { getDesktopPath, getAppDataBinPath } from "../../api/client";
+import { getDesktopPath, getAppDataBinPath } from "@/api/client";
 
 type Page = "overview" | "config";
 
@@ -35,9 +35,9 @@ function SettingIcon() {
 
 // ---- Menu Config ----
 
-const ICON_MAP: Record<string, React.ReactNode> = {
-  overview: <MoonIcon />,
-  config: <SettingIcon />,
+const ICON_MAP: { [K in Page]: React.ReactNode } = {
+  overview: <MoonIcon /> as React.ReactNode,
+  config: <SettingIcon /> as React.ReactNode,
 };
 
 // ---- Default Config ----
@@ -171,7 +171,7 @@ export default function Control() {
                 : "bg-[var(--color-text-muted)]"
             }`}
           />
-          MoonCast v1.0
+          MoonCast v{__APP_VERSION__}
         </div>
       </aside>
 

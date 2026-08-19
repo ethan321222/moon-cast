@@ -6,21 +6,22 @@ import type {
   SortField,
   SortDirection,
   ViewMode,
-} from "../../types";
-import { listDirectory, uploadFile, deletePath, renamePath, createDirectory } from "../../api/client";
-import { List } from "../../components/list";
-import { Breadcrumb } from "../../components/breadcrumb";
-import { Upload } from "../../components/upload";
-import type { CustomRequestOptions, UploadChangeParam } from "../../components/upload";
-import { useMessage } from "../../components/message";
-import { useTheme, initTheme } from "../../hooks/useTheme";
-import Button from "../../components/button";
+} from "@/types";
+import { listDirectory, uploadFile, deletePath, renamePath, createDirectory } from "@/api/client";
+import { List } from "@/components/list";
+import { Breadcrumb } from "@/components/breadcrumb";
+import { Upload } from "@/components/upload";
+import type { CustomRequestOptions, UploadChangeParam } from "@/components/upload";
+import { useMessage } from "@/components/message";
+import { useTheme, initTheme } from "@/hooks/useTheme";
+import Button from "@/components/button";
 import { CreateFolderModal, type CreateFolderModalRef } from "./create-folder-modal";
+import { ControlModal, type ControlModalRef } from "./control-modal";
 import { MediaPreview } from "./media-preview";
-import { ContextMenu } from "../../components/context-menu";
-import { getStorage, setStorage } from "../../utils/storage";
-import { getFileIcon } from "../../utils/file-icon";
-import { formatSize, formatDate } from "../../utils/format";
+import { ContextMenu } from "@/components/context-menu";
+import { getStorage, setStorage } from "@/utils/storage";
+import { getFileIcon } from "@/utils/file-icon";
+import { formatSize, formatDate } from "@/utils/format";
 
 export function Browser() {
   const { t } = useTranslation("browser");
@@ -37,6 +38,7 @@ export function Browser() {
   const [renaming, setRenaming] = useState<DirEntry | null>(null);
   const [newName, setNewName] = useState("");
   const createFolderModalRef = useRef<CreateFolderModalRef>(null);
+  const controlModalRef = useRef<ControlModalRef>(null);
 
   const loadDir = useCallback(async (path: string) => {
     setLoading(true);
@@ -212,6 +214,16 @@ export function Browser() {
           <h1 className="hidden sm:block text-lg font-semibold">MoonCast</h1>
         </div>
         <div className="flex items-center gap-2">
+            <Button
+              icon={
+                <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
+                  <line x1="12" y1="2" x2="12" y2="12" />
+                </svg>
+              }
+              onClick={() => controlModalRef.current?.open()}
+              title={t("header.control")}
+            />
           <Button
             icon={
               <svg viewBox="64 64 896 896" width="1em" height="1em" fill="currentColor" aria-hidden="true">
@@ -356,6 +368,9 @@ export function Browser() {
 
         {/* 新建文件夹对话框 */}
         <CreateFolderModal ref={createFolderModalRef} onCreate={handleMkdir} />
+
+        {/* 电源控制 */}
+        <ControlModal ref={controlModalRef} />
       </main>
 
       {/* 媒体预览 */}

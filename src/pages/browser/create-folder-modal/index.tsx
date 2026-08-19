@@ -1,8 +1,8 @@
 import { useState, useCallback, useImperativeHandle, forwardRef } from "react";
 import { useTranslation } from "react-i18next";
-import { Modal } from "../../../components/modal";
-import { Input } from "../../../components/input";
-import Button from "../../../components/button";
+import { Modal } from "@/components/modal";
+import { Input } from "@/components/input";
+import Button from "@/components/button";
 
 export interface CreateFolderModalRef {
   open: () => void;

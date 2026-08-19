@@ -1,5 +1,6 @@
 {
   "header": {
+    "control": "Control Panel",
     "newFolder": "New Folder",
     "switchToGrid": "Switch to grid",
     "switchToDetail": "Switch to detail",
@@ -7,6 +8,14 @@
     "themeLight": "Light mode",
     "upload": "Upload",
     "refresh": "Refresh"
+  },
+  "control": {
+    "title": "Control Panel",
+    "shutdown": "Shutdown",
+    "restart": "Restart",
+    "sleep": "Sleep",
+    "lock": "Lock Screen",
+    "confirm": "Click again to confirm"
   },
   "list": {
     "empty": "This folder is empty",

@@ -1,10 +1,10 @@
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { open } from "@tauri-apps/plugin-dialog";
-import type { ServerStatus } from "../../../types";
-import { Button } from "../../../components/button";
-import { Card } from "../../../components/card";
-import { Input } from "../../../components/input";
+import type { ServerStatus } from "@/types";
+import { Button } from "@/components/button";
+import { Card } from "@/components/card";
+import { Input } from "@/components/input";
 import styles from "./ServerPanel.module.css";
 
 interface ServerPanelProps {

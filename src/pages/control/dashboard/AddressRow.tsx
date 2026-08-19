@@ -1,6 +1,6 @@
 import { useCallback, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "../../../components/button";
+import { Button } from "@/components/button";
 
 export interface AddressRowProps {
   /** 前置图标 */

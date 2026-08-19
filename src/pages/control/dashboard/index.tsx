@@ -1,4 +1,4 @@
-import type { ServerStatus, AddressEntry } from "../../../types";
+import type { ServerStatus, AddressEntry } from "@/types";
 import { ServerPanel } from "./ServerPanel";
 import { AddressCard } from "./AddressCard";
 import { RecentRequests } from "./RecentRequests";

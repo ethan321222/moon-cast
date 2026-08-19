@@ -12,4 +12,5 @@ pub mod path;
 pub mod range;
 pub mod store;
 pub mod throttle;
+pub mod power;
 pub mod webdav;

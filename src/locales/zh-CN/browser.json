@@ -1,5 +1,6 @@
 {
   "header": {
+    "control": "控制面板",
     "newFolder": "新建文件夹",
     "switchToGrid": "切换到平铺",
     "switchToDetail": "切换到详细信息",
@@ -7,6 +8,14 @@
     "themeLight": "浅色模式",
     "upload": "上传文件",
     "refresh": "刷新"
+  },
+  "control": {
+    "title": "控制面板",
+    "shutdown": "关机",
+    "restart": "重启",
+    "sleep": "睡眠",
+    "lock": "锁屏",
+    "confirm": "再次点击确认"
   },
   "list": {
     "empty": "此文件夹为空",

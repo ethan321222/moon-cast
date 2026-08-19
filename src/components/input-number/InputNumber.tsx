@@ -1,5 +1,5 @@
 import { type InputHTMLAttributes, forwardRef } from "react";
-import inputStyles from "../input/Input.module.css";
+import inputStyles from "@/components/input/Input.module.css";
 
 export interface InputNumberProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "onChange" | "value"> {
   value: number;

@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
-import type { ServerStatus, AddressEntry } from "../../../types";
-import { Card } from "../../../components/card";
+import type { ServerStatus, AddressEntry } from "@/types";
+import { Card } from "@/components/card";
 import { AddressRow } from "./AddressRow";
 
 interface AddressCardProps {
