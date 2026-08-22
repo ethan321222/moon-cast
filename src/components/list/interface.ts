@@ -20,14 +20,9 @@ export interface ListProps<T = any> {
   style?: React.CSSProperties;
 }
 
-export interface ListItemProps {
+export interface ListItemProps extends React.HTMLAttributes<HTMLDivElement> {
   actions?: React.ReactNode[];
   extra?: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-  children?: React.ReactNode;
-  onClick?: (e: React.MouseEvent) => void;
-  onContextMenu?: (e: React.MouseEvent) => void;
 }
 
 export interface ListItemMetaProps {

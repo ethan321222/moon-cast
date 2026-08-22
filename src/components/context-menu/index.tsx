@@ -63,11 +63,21 @@ export function ContextMenu({ items, onClick, children, className, disabled, tit
     [disabled],
   );
 
-  // 长按处理（移动端）
+  // 统一手势管理：
+  // - onLongPress: 移动端长按打开菜单
+  // - onClick: 接管子元素点击，长按后不触发
+  // - onContextMenu: 桌面端右键打开菜单，移动端仅 suppress 原生菜单
   const longPressHandlers = useLongPress({
     onLongPress: (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
       setOpen(true);
+    },
+    onClick: (children.props as { onClick?: (e: React.MouseEvent) => void }).onClick,
+    onContextMenu: (e: React.MouseEvent) => {
+      if (pointerType === "fine") {
+        handleContextMenu(e);
+      }
+      (children.props as { onContextMenu?: (e: React.MouseEvent) => void }).onContextMenu?.(e);
     },
     disabled,
   });
@@ -133,14 +143,9 @@ export function ContextMenu({ items, onClick, children, className, disabled, tit
     [onClick, close],
   );
 
-  // cloneElement 注入 onContextMenu + 长按事件
+  // cloneElement 注入所有事件（由 hook 统一管理）
   const triggerNode = cloneElement(children, {
     ...longPressHandlers,
-    onContextMenu: (e: React.MouseEvent) => {
-      handleContextMenu(e);
-      longPressHandlers.onContextMenu(e);
-      (children.props as { onContextMenu?: (e: React.MouseEvent) => void }).onContextMenu?.(e);
-    },
   });
 
   // 渲染

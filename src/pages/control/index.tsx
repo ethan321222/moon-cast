@@ -6,7 +6,7 @@ import { Menu } from "@/components/menu";
 import type { ItemType } from "@/components/menu";
 import { Button } from "@/components/button";
 import { useTheme, initTheme } from "@/hooks/useTheme";
-import { useLocalStorageDraft } from "@/hooks/useLocalStorageDraft";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useServerLifecycle } from "./hooks/useServerLifecycle";
 import { Dashboard } from "./dashboard";
 import { Setting } from "./setting";
@@ -62,10 +62,10 @@ const DEFAULT_CONFIG: ServerConfig = {
 export default function Control() {
   const { t } = useTranslation("control");
   const [activePage, setActivePage] = useState<Page>("overview");
-  const [config, setConfig, { save: saveConfig, reset: resetConfig }] =
-    useLocalStorageDraft<ServerConfig>("mooncast-config", {
-      defaultValue: DEFAULT_CONFIG,
-    });
+  const [storedConfig, setConfig] = useLocalStorage<ServerConfig>("mooncast-config", {
+    defaultValue: DEFAULT_CONFIG,
+  });
+  const config = storedConfig ?? DEFAULT_CONFIG;
 
   const [qrUrl, setQrUrl] = useState<string | null>(null);
   const { toggleTheme } = useTheme();
@@ -94,7 +94,7 @@ export default function Control() {
 
   const handleConfigChange = useCallback(
     (field: keyof ServerConfig, value: unknown) => {
-      setConfig((prev) => ({ ...prev, [field]: value }));
+      setConfig((prev) => ({ ...(prev ?? DEFAULT_CONFIG), [field]: value }));
     },
     [setConfig],
   );
@@ -207,10 +207,8 @@ export default function Control() {
           <Setting
             config={config}
             disabled={!!status?.running}
-            loading={false}
             onChange={handleConfigChange}
-            onSave={saveConfig}
-            onReset={resetConfig}
+            onReset={() => setConfig(DEFAULT_CONFIG)}
           />
         )}
       </main>

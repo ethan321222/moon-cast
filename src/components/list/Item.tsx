@@ -7,15 +7,13 @@ export function ListItem({
   className,
   style,
   children,
-  onClick,
-  onContextMenu,
+  ...rest
 }: ListItemProps) {
   return (
     <div
+      {...rest}
       className={`${styles.item}${className ? ` ${className}` : ""}`}
       style={style}
-      onClick={onClick}
-      onContextMenu={onContextMenu}
     >
       <div className={styles.itemMain}>
         {children}

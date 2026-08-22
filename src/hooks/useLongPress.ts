@@ -3,6 +3,10 @@ import { useRef, useCallback, useEffect } from "react";
 export interface UseLongPressOptions {
   /** 长按触发回调 */
   onLongPress: (e: React.PointerEvent) => void;
+  /** 短按回调（长按触发后不会调用） */
+  onClick?: (e: React.MouseEvent) => void;
+  /** 右键菜单回调（触摸设备上自动 preventDefault 后调用） */
+  onContextMenu?: (e: React.MouseEvent) => void;
   /** 触发延迟（ms），默认 500 */
   delay?: number;
   /** 移动取消阈值（px），默认 10 */
@@ -17,6 +21,7 @@ export interface UseLongPressReturn {
   onPointerMove: (e: React.PointerEvent) => void;
   onPointerCancel: (e: React.PointerEvent) => void;
   onContextMenu: (e: React.MouseEvent) => void;
+  onClick: (e: React.MouseEvent) => void;
 }
 
 /**
@@ -30,6 +35,8 @@ export interface UseLongPressReturn {
  */
 export function useLongPress({
   onLongPress,
+  onClick,
+  onContextMenu,
   delay = 500,
   threshold = 10,
   disabled = false,
@@ -87,15 +94,30 @@ export function useLongPress({
     clear();
   }, [clear]);
 
-  // 触摸设备上长按触发后 suppress 原生 contextmenu
-  const onContextMenu = useCallback(
+  // 触摸设备上长按触发后 suppress 原生 contextmenu，然后调用传入的 handler
+  const handleContextMenu = useCallback(
     (e: React.MouseEvent) => {
       if (pointerTypeRef.current === "touch" || firedRef.current) {
         e.preventDefault();
       }
+      onContextMenu?.(e);
     },
-    [],
+    [onContextMenu],
   );
 
-  return { onPointerDown, onPointerUp, onPointerMove, onPointerCancel, onContextMenu };
+  // 长按触发后吞掉 click，否则调用传入的 onClick
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (firedRef.current) {
+        e.preventDefault();
+        e.stopPropagation();
+        firedRef.current = false;
+      } else {
+        onClick?.(e);
+      }
+    },
+    [onClick],
+  );
+
+  return { onPointerDown, onPointerUp, onPointerMove, onPointerCancel, onContextMenu: handleContextMenu, onClick: handleClick };
 }

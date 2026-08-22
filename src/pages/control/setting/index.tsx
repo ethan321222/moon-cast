@@ -21,13 +21,11 @@ const DEFAULT_AUTH_PASS = "123456";
 interface SettingProps {
   config: ServerConfig;
   disabled: boolean;
-  loading: boolean;
   onChange: (field: keyof ServerConfig, value: unknown) => void;
-  onSave: () => void;
   onReset: () => void;
 }
 
-export function Setting({ config, disabled, loading, onChange, onSave, onReset }: SettingProps) {
+export function Setting({ config, disabled, onChange, onReset }: SettingProps) {
   const { t } = useTranslation("control");
   const { setting, setTheme } = useTheme();
   const [lang = "system", setLang] = useLocalStorage<string>("mooncast-lang", {
@@ -314,9 +312,6 @@ export function Setting({ config, disabled, loading, onChange, onSave, onReset }
       <div className="flex gap-2.5 justify-end pt-2 pb-1">
         <Button onClick={onReset} disabled={disabled}>
           {t("common:reset")}
-        </Button>
-        <Button type="primary" onClick={onSave} disabled={disabled || loading}>
-          {loading ? t("common:saving") : t("common:save")}
         </Button>
       </div>
 
