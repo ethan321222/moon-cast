@@ -35,6 +35,7 @@
     },
     "delete": {
       "confirm": "确定删除 \"{{name}}\"？",
+      "folderWarning": "这将删除文件夹内的所有内容。",
       "success": "已删除 {{name}}",
       "error": "删除失败"
     },

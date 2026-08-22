@@ -50,11 +50,11 @@ export function Preview({
     <div className={styles.overlay} ref={overlayRef} onClick={handleOverlayClick}>
       <div className={styles.previewWrap}>
         <Button
-          type="text"
           shape="circle"
+          color="danger" 
           className={styles.closeBtn}
           icon={
-            <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5">
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
@@ -66,11 +66,11 @@ export function Preview({
         {total > 1 && (
           <>
             <Button
-              type="text"
+              type="primary"
               shape="circle"
               className={`${styles.navBtn} ${styles.navPrev}`}
               icon={
-                <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <polyline points="15 18 9 12 15 6" />
                 </svg>
               }
@@ -79,11 +79,11 @@ export function Preview({
               aria-label={t("image.prev")}
             />
             <Button
-              type="text"
+              type="primary"
               shape="circle"
               className={`${styles.navBtn} ${styles.navNext}`}
               icon={
-                <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <polyline points="9 18 15 12 9 6" />
                 </svg>
               }

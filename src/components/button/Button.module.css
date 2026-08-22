@@ -1,14 +1,15 @@
 .btn {
+  /* ===== 模板样式 — 只通过 var() + fallback 引用变量 ===== */
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   padding: var(--spacing-xs) var(--spacing-lg);
   border-radius: var(--radius-ctrl);
-  background: var(--color-ctrl-bg);
-  border: 1px solid var(--color-ctrl-border);
-  border-bottom-color: var(--color-ctrl-border-bottom);
-  color: var(--color-text);
+  background: var(--btn-bg, var(--color-ctrl-bg));
+  border: 1px solid var(--btn-border-color, var(--color-ctrl-border));
+  border-bottom-color: var(--btn-border-bottom-color, var(--color-ctrl-border-bottom));
+  color: var(--btn-text-color, var(--color-text));
   font-size: var(--font-size-body);
   font-weight: 400;
   font-family: var(--font-family);
@@ -19,166 +20,122 @@
 }
 
 .btn:hover {
-  background: var(--color-accent-subtle);
-  border-color: var(--color-accent);
+  background: var(--btn-bg-hover, var(--color-accent-subtle));
+  border-color: var(--btn-border-color-hover, var(--color-accent));
+  color: var(--btn-text-color-hover, var(--btn-text-color, var(--color-text)));
 }
 
 .btn:active {
-  background: var(--color-bg-active);
-  border-color: var(--color-accent-active);
+  background: var(--btn-bg-active, var(--color-bg-active));
+  border-color: var(--btn-border-color-active, var(--color-accent-active));
+  color: var(--btn-text-color-active, var(--btn-text-color, var(--color-text)));
 }
 
 .btn:disabled {
-  opacity: 0.45;
+  opacity: .9;
   cursor: not-allowed;
-  background: var(--color-ctrl-bg-disabled);
-  border-color: var(--color-ctrl-border);
+  background: var(--btn-bg-disabled, var(--color-ctrl-bg-disabled));
+  border-color: var(--btn-border-color-disabled, var(--color-ctrl-border));
 }
 
-/* ========== Variant ========== */
+/* ========== Variant（:where() 降低优先级，外部 className 可覆盖）========== */
 
 /* solid */
-.btn.solid {
-  border-bottom-color: transparent;
+:where(.btn.solid) {
+  --btn-border-bottom-color: transparent;
 }
 
-.btn.solid:hover {
-  border-bottom-color: var(--color-accent);
-}
-
-.btn.solid:active {
-  border-bottom-color: var(--color-accent-active);
-}
-
-/* outlined - 默认 */
-.btn.outlined {
-  background: var(--color-ctrl-bg);
-}
-
-.btn.outlined:hover {
-  background: var(--color-accent-subtle);
-}
+/* outlined - 默认，使用 .btn 的 fallback 值即可 */
 
 /* dashed */
-.btn.dashed {
-  background: var(--color-ctrl-bg);
+:where(.btn.dashed) {
   border-style: dashed;
 }
 
-.btn.dashed:hover {
-  background: var(--color-accent-subtle);
-}
-
 /* filled */
-.btn.filled {
-  background: var(--color-ctrl-bg-secondary);
-  border-color: var(--color-border-strong);
-  border-bottom-color: var(--color-ctrl-border-bottom);
-}
-
-.btn.filled:hover {
-  background: var(--color-accent-subtle);
+:where(.btn.filled) {
+  --btn-bg: var(--color-ctrl-bg-secondary);
+  --btn-border-color: var(--color-border-strong);
+  --btn-border-bottom-color: var(--color-ctrl-border-bottom);
+  --btn-bg-hover: var(--color-accent-subtle);
 }
 
 /* text */
-.btn.text {
-  background: transparent;
-  border-color: transparent;
-  color: var(--color-text);
-}
-
-.btn.text:hover {
-  background: var(--color-accent-subtle);
-  border-color: transparent;
+:where(.btn.text) {
+  --btn-bg: transparent;
+  --btn-border-color: transparent;
+  --btn-border-bottom-color: transparent;
+  --btn-text-color: var(--color-text);
+  --btn-bg-hover: var(--color-accent-subtle);
+  --btn-border-color-hover: transparent;
+  --btn-bg-active: var(--color-bg-active);
+  --btn-border-color-active: transparent;
 }
 
 /* link */
-.btn.link {
-  background: transparent !important;
-  border-color: transparent !important;
-  color: var(--color-accent);
+:where(.btn.link) {
+  --btn-bg: transparent;
+  --btn-border-color: transparent;
+  --btn-border-bottom-color: transparent;
+  --btn-text-color: var(--color-accent);
+  --btn-text-color-hover: var(--color-accent-active);
+  --btn-text-color-active: var(--color-accent-active);
+  --btn-bg-hover: transparent;
+  --btn-border-color-hover: transparent;
+  --btn-bg-active: transparent;
+  --btn-border-color-active: transparent;
+  --btn-bg-disabled: transparent;
+  --btn-border-color-disabled: transparent;
   padding-left: 0;
   padding-right: 0;
 }
 
-.btn.link:hover {
-  color: var(--color-accent-active);
-  background: transparent !important;
-  border-color: transparent !important;
+/* ========== Color（:where() 降低优先级）========== */
+
+/* primary solid */
+:where(.btn.colorPrimary.solid) {
+  --btn-bg: var(--color-accent);
+  --btn-border-color: var(--color-accent-border);
+  --btn-border-bottom-color: var(--color-accent-border-bottom);
+  --btn-text-color: var(--color-text-on-accent);
+  --btn-bg-hover: var(--color-accent-hover);
+  --btn-border-color-hover: var(--color-accent-active);
+  --btn-bg-active: var(--color-accent-active);
+  --btn-border-color-active: var(--color-accent-active);
 }
 
-.btn.link:active {
-  color: var(--color-accent-active);
-  background: transparent !important;
-  border-color: transparent !important;
+:where(.btn.colorPrimary.outlined) {
+  --btn-text-color: var(--color-accent);
+  --btn-border-color: var(--color-accent);
+  --btn-bg-hover: var(--color-accent-subtle);
 }
 
-.btn.link:disabled {
-  background: transparent !important;
-  border-color: transparent !important;
+:where(.btn.colorPrimary.link),
+:where(.btn.colorPrimary.text) {
+  --btn-text-color: var(--color-accent);
 }
 
-/* ========== Color ========== */
-
-/* primary */
-.btn.colorPrimary.solid {
-  background: var(--color-accent);
-  border-color: var(--color-accent-border);
-  border-bottom-color: var(--color-accent-border-bottom);
-  color: var(--color-text-on-accent);
+/* danger solid */
+:where(.btn.colorDanger.solid) {
+  --btn-bg: var(--color-danger);
+  --btn-border-color: var(--color-danger-hover);
+  --btn-border-bottom-color: var(--color-danger-border-bottom);
+  --btn-text-color: var(--color-text-on-accent);
+  --btn-bg-hover: var(--color-danger-hover);
+  --btn-border-color-hover: var(--color-danger-border-bottom);
 }
 
-.btn.colorPrimary.solid:hover {
-  background: var(--color-accent-hover);
-  border-color: var(--color-accent-active);
+:where(.btn.colorDanger.outlined) {
+  --btn-text-color: var(--color-danger);
+  --btn-border-color: var(--color-danger);
+  --btn-border-bottom-color: var(--color-danger-hover);
+  --btn-bg-hover: var(--color-danger-subtle);
+  --btn-border-color-hover: var(--color-danger);
 }
 
-.btn.colorPrimary.solid:active {
-  background: var(--color-accent-active);
-  border-color: var(--color-accent-active);
-}
-
-.btn.colorPrimary.outlined {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
-}
-
-.btn.colorPrimary.outlined:hover {
-  background: var(--color-accent-subtle);
-}
-
-.btn.colorPrimary.link,
-.btn.colorPrimary.text {
-  color: var(--color-accent);
-}
-
-/* danger */
-.btn.colorDanger.solid {
-  background: var(--color-danger);
-  border-color: var(--color-danger-hover);
-  border-bottom-color: var(--color-danger-border-bottom);
-  color: var(--color-text-on-accent);
-}
-
-.btn.colorDanger.solid:hover {
-  background: var(--color-danger-hover);
-  border-color: var(--color-danger-border-bottom);
-}
-
-.btn.colorDanger.outlined {
-  color: var(--color-danger);
-  border-color: var(--color-danger);
-  border-bottom-color: var(--color-danger-hover);
-}
-
-.btn.colorDanger.outlined:hover {
-  background: var(--color-danger-subtle);
-  border-color: var(--color-danger);
-}
-
-.btn.colorDanger.link,
-.btn.colorDanger.text {
-  color: var(--color-danger);
+:where(.btn.colorDanger.link),
+:where(.btn.colorDanger.text) {
+  --btn-text-color: var(--color-danger);
 }
 
 /* ========== Shape ========== */
@@ -201,14 +158,11 @@
 
 /* ========== Ghost ========== */
 
-.ghost {
-  background: transparent;
-  border-color: currentColor;
-}
-
-.ghost:hover {
-  background: var(--color-accent-subtle);
-  border-color: var(--color-accent);
+:where(.ghost) {
+  --btn-bg: transparent;
+  --btn-border-color: currentColor;
+  --btn-bg-hover: var(--color-accent-subtle);
+  --btn-border-color-hover: var(--color-accent);
 }
 
 /* ========== Block ========== */

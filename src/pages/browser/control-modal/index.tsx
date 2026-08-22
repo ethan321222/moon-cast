@@ -133,7 +133,7 @@ export const ControlModal = forwardRef<ControlModalRef>((_props, ref) => {
   );
 
   return (
-    <Modal open={visible} onClose={handleClose} title={t("control.title")} width={320}>
+    <Modal open={visible} onClose={handleClose} title={t("control.title")} width={320} centered={false}>
       <div className="grid grid-cols-2 gap-3">
         {ACTIONS.map((item) => {
           const isConfirming = confirming === item.key;

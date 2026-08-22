@@ -35,6 +35,7 @@
     },
     "delete": {
       "confirm": "Delete \"{{name}}\"?",
+      "folderWarning": "This will delete all contents inside the folder.",
       "success": "Deleted {{name}}",
       "error": "Delete failed"
     },

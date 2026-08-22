@@ -47,8 +47,8 @@ export const CreateFolderModal = forwardRef<CreateFolderModalRef, CreateFolderMo
           autoFocus
         />
         <div className="flex flex-wrap items-center justify-end gap-2 mt-4 w-full">
-          <Button onClick={handleClose}>{t("common:cancel")}</Button>
-          <Button type="primary" onClick={handleCreate} disabled={!name.trim()}>{t("common:create")}</Button>
+          <Button color="danger" onClick={handleClose}>{t("common:cancel")}</Button>
+          <Button type="primary" onClick={handleCreate} >{t("common:create")}</Button>
         </div>
       </Modal>
     );

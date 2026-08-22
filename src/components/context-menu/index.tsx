@@ -9,6 +9,9 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+import { useLongPress } from "@/hooks/useLongPress";
+import { usePointerType } from "@/hooks/usePointerType";
+import { ActionSheet } from "@/components/action-sheet";
 
 export interface ContextMenuItem {
   key: string;
@@ -23,33 +26,32 @@ export interface ContextMenuProps {
   items: ContextMenuItem[];
   /** 点击菜单项回调 */
   onClick: (key: string) => void;
-  /** 子元素（右键触发目标） */
-  children: ReactElement<{ onContextMenu?: (e: React.MouseEvent) => void }>;
+  /** 子元素（右键 / 长按触发目标） */
+  children: ReactElement<Record<string, unknown>>;
   /** 自定义类名 */
   className?: string;
   /** 是否禁用 */
   disabled?: boolean;
+  /** ActionSheet 标题（移动端显示） */
+  title?: ReactNode;
 }
 
 /**
- * 通用右键菜单组件
+ * 通用右键菜单组件（响应式）
  *
- * 用法：
- * ```tsx
- * <ContextMenu items={[...]} onClick={(key) => {}}>
- *   <div>右键点击我</div>
- * </ContextMenu>
- * ```
+ * - 桌面（fine pointer）：右键弹出浮动菜单
+ * - 移动（coarse pointer）：长按弹出底部 ActionSheet
  */
-export function ContextMenu({ items, onClick, children, className, disabled }: ContextMenuProps) {
+export function ContextMenu({ items, onClick, children, className, disabled, title }: ContextMenuProps) {
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const menuRef = useRef<HTMLDivElement>(null);
+  const pointerType = usePointerType();
 
   // 关闭菜单
   const close = useCallback(() => setOpen(false), []);
 
-  // 处理右键事件
+  // 处理右键事件（桌面）
   const handleContextMenu = useCallback(
     (e: React.MouseEvent) => {
       if (disabled) return;
@@ -61,9 +63,18 @@ export function ContextMenu({ items, onClick, children, className, disabled }: C
     [disabled],
   );
 
-  // 全局 mousedown 关闭（点击菜单外部）
+  // 长按处理（移动端）
+  const longPressHandlers = useLongPress({
+    onLongPress: (e) => {
+      setPosition({ x: e.clientX, y: e.clientY });
+      setOpen(true);
+    },
+    disabled,
+  });
+
+  // 全局 mousedown 关闭（点击菜单外部）—— 仅桌面浮动菜单需要
   useEffect(() => {
-    if (!open) return;
+    if (!open || pointerType === "coarse") return;
     const handleMouseDown = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         close();
@@ -71,11 +82,11 @@ export function ContextMenu({ items, onClick, children, className, disabled }: C
     };
     document.addEventListener("mousedown", handleMouseDown);
     return () => document.removeEventListener("mousedown", handleMouseDown);
-  }, [open, close]);
+  }, [open, close, pointerType]);
 
   // Escape 键关闭
   useEffect(() => {
-    if (!open) return;
+    if (!open || pointerType === "coarse") return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.stopPropagation();
@@ -84,15 +95,15 @@ export function ContextMenu({ items, onClick, children, className, disabled }: C
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, close]);
+  }, [open, close, pointerType]);
 
   // 滚动时关闭
   useEffect(() => {
-    if (!open) return;
+    if (!open || pointerType === "coarse") return;
     const handleScroll = () => close();
     window.addEventListener("scroll", handleScroll, true);
     return () => window.removeEventListener("scroll", handleScroll, true);
-  }, [open, close]);
+  }, [open, close, pointerType]);
 
   // 视口边界调整
   const getAdjustedPosition = useCallback(() => {
@@ -100,15 +111,12 @@ export function ContextMenu({ items, onClick, children, className, disabled }: C
     const rect = menuRef.current.getBoundingClientRect();
     let { x: left, y: top } = position;
 
-    // 右边界翻转
     if (left + rect.width > window.innerWidth) {
       left = left - rect.width;
     }
-    // 下边界翻转
     if (top + rect.height > window.innerHeight) {
       top = top - rect.height;
     }
-    // 确保不超出左/上边界
     left = Math.max(0, left);
     top = Math.max(0, top);
 
@@ -125,38 +133,49 @@ export function ContextMenu({ items, onClick, children, className, disabled }: C
     [onClick, close],
   );
 
-  // cloneElement 注入 onContextMenu，不加额外包裹层
+  // cloneElement 注入 onContextMenu + 长按事件
   const triggerNode = cloneElement(children, {
+    ...longPressHandlers,
     onContextMenu: (e: React.MouseEvent) => {
       handleContextMenu(e);
-      // 保留子元素原有的 onContextMenu
-      children.props.onContextMenu?.(e);
+      longPressHandlers.onContextMenu(e);
+      (children.props as { onContextMenu?: (e: React.MouseEvent) => void }).onContextMenu?.(e);
     },
   });
 
-  // 菜单渲染（Portal 到 body）
-  const menu = open
-    ? createPortal(
-        <MenuPopup
-          ref={menuRef}
-          items={items}
-          position={getAdjustedPosition()}
-          className={className}
-          onItemClick={handleItemClick}
-        />,
-        document.body,
-      )
-    : null;
+  // 渲染
+  const menu =
+    open && pointerType === "fine"
+      ? createPortal(
+          <MenuPopup
+            ref={menuRef}
+            items={items}
+            position={getAdjustedPosition()}
+            className={className}
+            onItemClick={handleItemClick}
+          />,
+          document.body,
+        )
+      : null;
 
   return (
     <>
       {triggerNode}
       {menu}
+      {pointerType === "coarse" && (
+        <ActionSheet
+          open={open}
+          items={items}
+          onClick={(key) => handleItemClick(key)}
+          onClose={close}
+          title={title}
+        />
+      )}
     </>
   );
 }
 
-/* ========== 内部菜单弹出层 ========== */
+/* ========== 内部菜单弹出层（桌面） ========== */
 
 interface MenuPopupProps {
   items: ContextMenuItem[];

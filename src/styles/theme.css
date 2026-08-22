@@ -7,139 +7,149 @@
 :root,
 [data-theme="light"] {
   /* ===== 品牌/主题色 ===== */
-  --color-accent:               #0078d4;
-  --color-accent-hover:         #106ebe;
-  --color-accent-active:        #005a9e;
-  --color-accent-border:        #0067b8;
-  --color-accent-border-bottom: #005a9e;
-  --color-accent-subtle:        #e5f1fb;
+  --color-accent:               #0078d4;  /* 主强调色，用于 primary 按钮背景、链接、聚焦边框 */
+  --color-accent-hover:         #106ebe;  /* 强调色悬停态 */
+  --color-accent-active:        #005a9e;  /* 强调色按下态 */
+  --color-accent-border:        #0067b8;  /* 强调色按钮边框 */
+  --color-accent-border-bottom: #005a9e;  /* 强调色按钮下边框（立体感） */
+  --color-accent-subtle:        #e5f1fb;  /* 强调色浅底，用于 hover 背景、选中行 */
 
   /* ===== 危险色 ===== */
-  --color-danger:               #c42b1c;
-  --color-danger-hover:         #a11a12;
-  --color-danger-border-bottom: #8b1510;
-  --color-danger-subtle:        #fde7e7;
+  --color-danger:               #c42b1c;  /* 危险操作主色（删除按钮背景等） */
+  --color-danger-hover:         #a11a12;  /* 危险色悬停态 */
+  --color-danger-border-bottom: #8b1510;  /* 危险按钮下边框 */
+  --color-danger-subtle:        #fde7e7;  /* 危险浅底（错误提示背景） */
 
   /* ===== 成功/警告 ===== */
-  --color-success:              #0f7b0f;
-  --color-warning:              #9d5d00;
+  --color-success:              #0f7b0f;  /* 成功状态文字/图标 */
+  --color-warning:              #9d5d00;  /* 警告状态文字/图标 */
 
   /* ===== 控件基础 ===== */
-  --color-ctrl-bg:              #fdfdfd;
-  --color-ctrl-bg-secondary:    #f5f5f5;
-  --color-ctrl-bg-disabled:     #f0f0f0;
-  --color-ctrl-border:          #ccc;
-  --color-ctrl-border-bottom:   #aaa;
-  --color-ctrl-border-focus:    var(--color-accent);
+  --color-ctrl-bg:              #fdfdfd;  /* 输入框、按钮等控件默认背景 */
+  --color-ctrl-bg-secondary:    #f5f5f5;  /* 控件次级背景（filled 按钮等） */
+  --color-ctrl-bg-disabled:     #f0f0f0;  /* 控件禁用态背景 */
+  --color-ctrl-border:          #ccc;     /* 控件默认边框 */
+  --color-ctrl-border-bottom:   #aaa;     /* 控件下边框（增加立体感） */
+  --color-ctrl-border-focus:    var(--color-accent);  /* 控件聚焦边框色 */
 
   /* ===== 文字 ===== */
-  --color-text:                 #1a1a1a;
-  --color-text-secondary:       #616161;
-  --color-text-placeholder:     #999;
-  --color-text-disabled:        #a0a0a0;
-  --color-text-on-accent:       #fff;
+  --color-text:                 #1a1a1a;  /* 主文字色（正文、标题） */
+  --color-text-secondary:       #616161;  /* 次要文字（描述、时间戳） */
+  --color-text-placeholder:     #999;     /* 占位符文字 */
+  --color-text-disabled:        #a0a0a0;  /* 禁用态文字 */
+  --color-text-on-accent:       #fff;     /* accent 背景上的文字/图标色 */
 
   /* ===== 表面/容器 ===== */
-  --color-surface:              #ffffff;
-  --color-surface-secondary:    #f9f9f9;
-  --color-bg:                   #ffffff;
-  --color-bg-sidebar:           #f5f5f5;
-  --color-bg-hover:             #e5f1fb;
-  --color-bg-active:            #cce4f7;
+  --color-surface:              #ffffff;  /* 卡片、弹窗等浮层背景 */
+  --color-surface-secondary:    #f9f9f9;  /* 次级容器背景 */
+  --color-bg:                   #ffffff;  /* 页面整体底色 */
+  --color-bg-sidebar:           #f5f5f5;  /* 侧边栏底色 */
+  --color-bg-hover:             #e5f1fb;  /* 列表项/菜单悬停背景 */
+  --color-bg-active:            #cce4f7;  /* 列表项/菜单按下背景 */
 
   /* ===== 边框 ===== */
-  --color-border:               #e5e5e5;
-  --color-border-strong:        #d1d1d1;
+  --color-border:               #e5e5e5;  /* 通用分隔线、容器边框 */
+  --color-border-strong:        #d1d1d1;  /* 强调边框（分组分隔线） */
 
   /* ===== 遮罩 ===== */
-  --color-overlay:              rgba(0, 0, 0, 0.3);
+  --color-overlay:              rgba(0, 0, 0, 0.72);  /* 模态遮罩层（对话框/图片预览背景） */
 
   /* ===== 阴影 ===== */
-  --shadow-flyout:              0 2px 8px rgba(0, 0, 0, 0.14);
-  --shadow-dialog:              0 8px 32px rgba(0, 0, 0, 0.18);
-  --shadow-tooltip:             0 1px 4px rgba(0, 0, 0, 0.12);
+  --shadow-flyout:              0 2px 8px rgba(0, 0, 0, 0.14);   /* 弹出菜单/下拉框阴影 */
+  --shadow-dialog:              0 8px 32px rgba(0, 0, 0, 0.18);  /* 对话框阴影 */
+  --shadow-tooltip:             0 1px 4px rgba(0, 0, 0, 0.12);   /* 工具提示阴影 */
 
   /* ===== 圆角 ===== */
-  --radius-ctrl:                4px;
-  --radius-surface:             8px;
-  --radius-pill:                9999px;
+  --radius-ctrl:                4px;      /* 控件圆角（按钮、输入框） */
+  --radius-surface:             8px;      /* 容器圆角（卡片、弹窗） */
+  --radius-pill:                9999px;   /* 胶囊圆角（标签、round 按钮） */
 
   /* ===== 字体 ===== */
   --font-family:                "Segoe UI Variable", "Microsoft YaHei UI", "Segoe UI", system-ui, sans-serif;
   --font-mono:                  "Cascadia Code", "Fira Code", monospace;
-  --font-size-caption:          11px;
-  --font-size-body:             12px;
-  --font-size-body-lg:          14px;
-  --font-size-subtitle:         16px;
-  --font-size-title:            20px;
+  --font-size-caption:          11px;     /* 最小文字（标签、角标） */
+  --font-size-body:             12px;     /* 正文默认 */
+  --font-size-body-lg:          14px;     /* 正文加大（副标题段落） */
+  --font-size-subtitle:         16px;     /* 小标题 */
+  --font-size-title:            20px;     /* 页面标题 */
 
   /* ===== 尺寸 ===== */
-  --height-ctrl-sm:             24px;
-  --height-ctrl:                32px;
-  --height-ctrl-lg:             40px;
+  --height-ctrl-sm:             24px;     /* 小号控件高度 */
+  --height-ctrl:                32px;     /* 默认控件高度 */
+  --height-ctrl-lg:             40px;     /* 大号控件高度 */
 
   /* ===== 间距 ===== */
-  --spacing-xs:                 4px;
-  --spacing-sm:                 8px;
-  --spacing-md:                 12px;
-  --spacing-lg:                 16px;
-  --spacing-xl:                 24px;
+  --spacing-xs:                 4px;      /* 极小间距（图标与文字） */
+  --spacing-sm:                 8px;      /* 小间距（控件内边距） */
+  --spacing-md:                 12px;     /* 中等间距（列表项间） */
+  --spacing-lg:                 16px;     /* 大间距（区块内边距） */
+  --spacing-xl:                 24px;     /* 特大间距（区块间分隔） */
 
   /* ===== 动画 ===== */
-  --duration-fast:              0.1s;
-  --duration-normal:            0.15s;
+  --duration-fast:              0.1s;     /* 快速过渡（hover 反馈） */
+  --duration-normal:            0.15s;    /* 常规过渡（展开/收起） */
 
   /* ===== 装饰色（月亮主题） ===== */
-  --moon:                       #e8a020;
-  --moon-soft:                  rgba(232, 160, 32, 0.12);
+  --moon:                       #e8a020;              /* 月亮装饰主色 */
+  --moon-soft:                  rgba(232, 160, 32, 0.12);  /* 月亮装饰柔光（背景点缀） */
 }
 
 /* ---------- Dark ---------- */
 [data-theme="dark"] {
-  --color-accent:               #0078d4;
+  /* ===== 品牌/主题色 ===== */
+  --color-accent:               #0078d4;  /* 暗色下保持同一品牌蓝 */
   --color-accent-hover:         #106ebe;
   --color-accent-active:        #005a9e;
   --color-accent-border:        #0067b8;
   --color-accent-border-bottom: #005a9e;
-  --color-accent-subtle:        #263f57;
+  --color-accent-subtle:        #263f57;  /* 暗色下强调浅底（深蓝灰） */
 
-  --color-danger:               #ff6b6b;
+  /* ===== 危险色 ===== */
+  --color-danger:               #ff6b6b;  /* 暗色下提亮以保证可见性 */
   --color-danger-hover:         #e05050;
   --color-danger-border-bottom: #c42b1c;
-  --color-danger-subtle:        #3d1c1c;
+  --color-danger-subtle:        #3d1c1c;  /* 暗色错误提示背景 */
 
-  --color-success:              #6ccb5f;
+  /* ===== 成功/警告 ===== */
+  --color-success:              #6ccb5f;  /* 暗色下提亮 */
   --color-warning:              #f7c948;
 
-  --color-ctrl-bg:              #2d2d2f;
-  --color-ctrl-bg-secondary:    #383838;
-  --color-ctrl-bg-disabled:     #1d1d1f;
-  --color-ctrl-border:          #555;
-  --color-ctrl-border-bottom:   #444;
+  /* ===== 控件基础 ===== */
+  --color-ctrl-bg:              #2d2d2f;  /* 控件默认背景（深灰） */
+  --color-ctrl-bg-secondary:    #383838;  /* 控件次级背景 */
+  --color-ctrl-bg-disabled:     #1d1d1f;  /* 控件禁用态背景 */
+  --color-ctrl-border:          #555;     /* 控件边框 */
+  --color-ctrl-border-bottom:   #444;     /* 控件下边框 */
   --color-ctrl-border-focus:    var(--color-accent);
 
-  --color-text:                 #f5f5f7;
-  --color-text-secondary:       #a0a0a0;
-  --color-text-placeholder:     #666;
-  --color-text-disabled:        #555;
-  --color-text-on-accent:       #000;
+  /* ===== 文字 ===== */
+  --color-text:                 #f5f5f7;  /* 主文字（亮白） */
+  --color-text-secondary:       #a0a0a0;  /* 次要文字 */
+  --color-text-placeholder:     #666;     /* 占位符 */
+  --color-text-disabled:        #555;     /* 禁用态文字 */
+  --color-text-on-accent:       #fff;     /* accent 背景上的文字（需与蓝色形成对比） */
 
-  --color-surface:              #2c2c2c;
-  --color-surface-secondary:    #252525;
-  --color-bg:                   #1a1a1a;
-  --color-bg-sidebar:           #202020;
-  --color-bg-hover:             #1a3a5c;
-  --color-bg-active:            #15304d;
+  /* ===== 表面/容器 ===== */
+  --color-surface:              #2c2c2c;  /* 卡片/弹窗背景 */
+  --color-surface-secondary:    #252525;  /* 次级容器背景 */
+  --color-bg:                   #1a1a1a;  /* 页面底色 */
+  --color-bg-sidebar:           #202020;  /* 侧边栏底色 */
+  --color-bg-hover:             #1a3a5c;  /* 列表悬停 */
+  --color-bg-active:            #15304d;  /* 列表按下 */
 
-  --color-border:               #3d3d3d;
-  --color-border-strong:        #555;
+  /* ===== 边框 ===== */
+  --color-border:               #3d3d3d;  /* 通用分隔线 */
+  --color-border-strong:        #555;     /* 强调边框 */
 
-  --color-overlay:              rgba(0, 0, 0, 0.6);
+  /* ===== 遮罩 ===== */
+  --color-overlay:              rgba(0, 0, 0, 0.82);  /* 暗色下遮罩更深 */
 
+  /* ===== 阴影 ===== */
   --shadow-flyout:              0 2px 8px rgba(0, 0, 0, 0.4);
   --shadow-dialog:              0 8px 32px rgba(0, 0, 0, 0.5);
   --shadow-tooltip:             0 1px 4px rgba(0, 0, 0, 0.3);
 
+  /* ===== 装饰色（月亮主题） ===== */
   --moon:                       #f5a623;
   --moon-soft:                  rgba(245, 166, 35, 0.15);
 }

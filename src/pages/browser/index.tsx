@@ -15,6 +15,8 @@ import type { CustomRequestOptions, UploadChangeParam } from "@/components/uploa
 import { useMessage } from "@/components/message";
 import { useTheme, initTheme } from "@/hooks/useTheme";
 import Button from "@/components/button";
+import { Modal } from "@/components/modal";
+import { Input } from "@/components/input";
 import { CreateFolderModal, type CreateFolderModalRef } from "./create-folder-modal";
 import { ControlModal, type ControlModalRef } from "./control-modal";
 import { MediaPreview } from "./media-preview";
@@ -37,6 +39,7 @@ export function Browser() {
   const [messageApi, contextHolder] = useMessage();
   const [renaming, setRenaming] = useState<DirEntry | null>(null);
   const [newName, setNewName] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState<DirEntry | null>(null);
   const createFolderModalRef = useRef<CreateFolderModalRef>(null);
   const controlModalRef = useRef<ControlModalRef>(null);
 
@@ -153,19 +156,21 @@ export function Browser() {
 
   // --- 文件操作 ---
 
-  const handleDelete = useCallback(
-    async (entry: DirEntry) => {
-      if (!confirm(t("action.delete.confirm", { name: entry.name }))) return;
-      try {
-        await deletePath(entry.rel_path);
-        messageApi.success(t("action.delete.success", { name: entry.name }));
-        loadDir(currentPath);
-      } catch (e) {
-        messageApi.error(e instanceof Error ? e.message : t("action.delete.error"));
-      }
-    },
-    [messageApi, currentPath, loadDir]
-  );
+  const handleDelete = useCallback((entry: DirEntry) => {
+    setDeleteTarget(entry);
+  }, []);
+
+  const confirmDelete = useCallback(async () => {
+    if (!deleteTarget) return;
+    try {
+      await deletePath(deleteTarget.rel_path);
+      messageApi.success(t("action.delete.success", { name: deleteTarget.name }));
+      loadDir(currentPath);
+    } catch (e) {
+      messageApi.error(e instanceof Error ? e.message : t("action.delete.error"));
+    }
+    setDeleteTarget(null);
+  }, [deleteTarget, messageApi, currentPath, loadDir]);
 
   const handleRename = useCallback((entry: DirEntry) => {
     setRenaming(entry);
@@ -340,26 +345,11 @@ export function Browser() {
                     </span>
                   ) : undefined}
                 >
-                  {renaming?.rel_path === entry.rel_path ? (
-                    <input
-                      value={newName}
-                      onChange={(e) => setNewName(e.target.value)}
-                      onBlur={submitRename}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") submitRename();
-                        if (e.key === "Escape") setRenaming(null);
-                      }}
-                      onClick={(e) => e.stopPropagation()}
-                      autoFocus
-                      className="px-1.5 py-0.5 border border-[var(--color-primary)] rounded text-[13px] bg-[var(--color-bg-elevated)] text-[var(--color-text)] outline-none"
-                    />
-                  ) : (
-                    <List.Item.Meta
-                      avatar={<span className="file-icon text-base shrink-0">{getFileIcon(entry)}</span>}
-                      title={entry.name}
-                      description={viewMode !== "detail" ? (entry.is_dir ? t("list.folder") : `${formatSize(entry.size)} · ${formatDate(entry.modified_ts)}`) : undefined}
-                    />
-                  )}
+                  <List.Item.Meta
+                    avatar={<span className="file-icon text-base shrink-0">{getFileIcon(entry)}</span>}
+                    title={entry.name}
+                    description={viewMode !== "detail" ? (entry.is_dir ? t("list.folder") : `${formatSize(entry.size)} · ${formatDate(entry.modified_ts)}`) : undefined}
+                  />
                 </List.Item>
               </ContextMenu>
             )}
@@ -371,6 +361,32 @@ export function Browser() {
 
         {/* 电源控制 */}
         <ControlModal ref={controlModalRef} />
+
+        {/* 重命名对话框 */}
+        <Modal open={!!renaming} onClose={() => setRenaming(null)} title={t("contextMenu.rename")} width={360}>
+          <Input
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            placeholder={renaming?.name}
+            onKeyDown={(e) => e.key === "Enter" && submitRename()}
+            autoFocus
+          />
+          <div className="flex flex-wrap items-center justify-end gap-2 mt-4 w-full">
+            <Button onClick={() => setRenaming(null)}>{t("common:cancel")}</Button>
+            <Button type="primary" onClick={submitRename}>{t("common:confirm")}</Button>
+          </div>
+        </Modal>
+
+        {/* 删除确认对话框 */}
+        <Modal open={!!deleteTarget} onClose={() => setDeleteTarget(null)} title={t("action.delete.confirm", { name: deleteTarget?.name })} width={360}>
+          {deleteTarget?.is_dir && (
+            <p className="text-sm text-[var(--color-text-secondary)] mb-4">{t("action.delete.folderWarning")}</p>
+          )}
+          <div className="flex flex-wrap items-center justify-end gap-2 w-full">
+            <Button onClick={() => setDeleteTarget(null)}>{t("common:cancel")}</Button>
+            <Button color="danger" onClick={confirmDelete}>{t("common:delete")}</Button>
+          </div>
+        </Modal>
       </main>
 
       {/* 媒体预览 */}
