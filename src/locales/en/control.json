@@ -76,9 +76,11 @@
     "tunnelBinDir": "cloudflared Directory",
     "tunnelBinDirDesc": "Auto-downloads if not present",
     "tunnelBrowse": "Browse",
-    "logs": "Logs",
+    "logs": "Config & Log Files",
     "logDir": "Log Directory",
-    "openDir": "Open Directory"
+    "openLogDir": "Open Log Dir",
+    "configDir": "Config Directory",
+    "openConfigDir": "Open Config Dir"
   },
   "qrModal": {
     "title": "Scan to Access"

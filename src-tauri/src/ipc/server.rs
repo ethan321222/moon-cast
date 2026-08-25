@@ -8,6 +8,7 @@ use crate::utils::logger_next as logger;
 use crate::utils::net;
 use tauri::{AppHandle, Emitter, Manager, State};
 
+use super::config::{status_store, AppStatus, ServiceAddress};
 use super::state::{AddressEvent, AppState, LanAddress, ServerStatus};
 
 /// 检测二进制文件是否可执行。
@@ -100,6 +101,21 @@ pub async fn start_server(
         });
     }
 
+    // Persist runtime status so external tools can read it
+    let mut addresses = vec![
+        ServiceAddress { label: "local".to_string(), url: format!("http://127.0.0.1:{}/", port) },
+    ];
+    for ip in &ips {
+        addresses.push(ServiceAddress {
+            label: "lan".to_string(),
+            url: format!("http://{}:{}", ip, port),
+        });
+    }
+    let _ = status_store(&state.app_data_dir).save(&AppStatus {
+        running: true,
+        addresses: addresses.clone(),
+    });
+
     // If tunnel is enabled, emit loading then spawn async task
     if config.tunnel_enabled {
         let _ = app_handle.emit("address-ready", AddressEvent {
@@ -116,6 +132,7 @@ pub async fn start_server(
         let tunnel_bin = config.tunnel_bin.clone();
         let app_data_dir = state.app_data_dir.clone();
         let app_handle_clone = app_handle.clone();
+        let status_addresses = addresses.clone();
 
         tokio::spawn(async move {
             // 直接用 tunnel_bin 路径
@@ -175,9 +192,23 @@ pub async fn start_server(
                         status: "ready".to_string(),
                         status_text: None,
                         name: "tunnel".to_string(),
-                        url: status.public_url,
+                        url: status.public_url.clone(),
                         error: None,
                     });
+
+                    // Append tunnel address to status.json
+                    if let Some(ref tunnel_url) = status.public_url {
+                        let mut addrs = status_addresses;
+                        addrs.push(ServiceAddress {
+                            label: "tunnel".to_string(),
+                            url: tunnel_url.clone(),
+                        });
+                        let _ = status_store(&app_data_dir).save(&AppStatus {
+                            running: true,
+                            addresses: addrs,
+                        });
+                    }
+
                     let mut tunnel = tunnel_state.lock().await;
                     *tunnel = Some(handle);
                 }
@@ -219,6 +250,9 @@ pub async fn stop_server(state: State<'_, AppState>) -> Result<(), String> {
     if let Some(handle) = server_guard.take() {
         handle.stop().await;
     }
+
+    // Clear runtime status
+    let _ = status_store(&state.app_data_dir).save(&AppStatus::default());
 
     Ok(())
 }

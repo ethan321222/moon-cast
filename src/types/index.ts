@@ -37,6 +37,24 @@ export interface ServerConfig {
   tunnel_bin: string | null;
 }
 
+// 应用配置（服务器配置 + UI 偏好）
+export interface AppConfig extends ServerConfig {
+  theme: string;
+  lang: string;
+}
+
+// 运行时状态（写入 status.json）
+export interface AppStatus {
+  running: boolean;
+  addresses: ServiceAddress[];
+}
+
+// 服务暴露的单个访问地址
+export interface ServiceAddress {
+  label: string;
+  url: string;
+}
+
 // 隧道状态
 export interface TunnelStatus {
   running: boolean;

@@ -76,9 +76,11 @@
     "tunnelBinDir": "cloudflared 目录",
     "tunnelBinDirDesc": "软件不存在时自动下载",
     "tunnelBrowse": "浏览",
-    "logs": "日志",
+    "logs": "配置和日志文件",
     "logDir": "日志目录",
-    "openDir": "打开目录"
+    "openLogDir": "打开日志目录",
+    "configDir": "配置目录",
+    "openConfigDir": "显示配置目录"
   },
   "qrModal": {
     "title": "扫码访问"

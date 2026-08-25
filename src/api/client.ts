@@ -1,6 +1,8 @@
 import { invoke } from "@tauri-apps/api/core";
 import type {
   DirResponse,
+  AppConfig,
+  AppStatus,
   ServerConfig,
   ServerStatus,
   LanAddress,
@@ -124,6 +126,24 @@ export async function getDesktopPath(): Promise<string> {
 
 export async function getAppDataBinPath(): Promise<string> {
   return invoke("get_app_data_bin_path");
+}
+
+// ==================== 配置持久化 API ====================
+
+export async function loadAppConfig(): Promise<AppConfig> {
+  return invoke("load_app_config");
+}
+
+export async function saveAppConfig(config: AppConfig): Promise<void> {
+  return invoke("save_app_config", { config });
+}
+
+export async function getAppStatus(): Promise<AppStatus> {
+  return invoke("get_app_status");
+}
+
+export async function getConfigFilePath(): Promise<string> {
+  return invoke("get_config_file_path");
 }
 
 // ==================== Tauri IPC API ====================

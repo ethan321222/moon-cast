@@ -1,11 +1,8 @@
 import { useCallback, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { open } from "@tauri-apps/plugin-dialog";
-import type { ServerConfig } from "@/types";
-import type { ThemeSetting } from "@/hooks/useTheme";
-import { useTheme } from "@/hooks/useTheme";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { getLogDirPath } from "@/api/client";
+import type { AppConfig } from "@/types";
+import { getLogDirPath, getConfigFilePath } from "@/api/client";
 import { SettingBox } from "./SettingBox";
 import { Input } from "@/components/input";
 import { InputNumber } from "@/components/input-number";
@@ -19,29 +16,21 @@ const DEFAULT_AUTH_USER = "admin";
 const DEFAULT_AUTH_PASS = "123456";
 
 interface SettingProps {
-  config: ServerConfig;
+  config: AppConfig;
   disabled: boolean;
-  onChange: (field: keyof ServerConfig, value: unknown) => void;
+  onChange: (field: keyof AppConfig, value: unknown) => void;
   onReset: () => void;
 }
 
 export function Setting({ config, disabled, onChange, onReset }: SettingProps) {
   const { t } = useTranslation("control");
-  const { setting, setTheme } = useTheme();
-  const [lang = "system", setLang] = useLocalStorage<string>("mooncast-lang", {
-    defaultValue: "system",
-    serializer: (v) => v,
-    deserializer: (raw) => {
-      if (raw.startsWith("zh")) return "zh";
-      if (raw.startsWith("en")) return "en";
-      return "system";
-    },
-  });
   const [logDir, setLogDir] = useState("");
+  const [configFile, setConfigFile] = useState("");
   const [webDavWarningOpen, setWebDavWarningOpen] = useState(false);
 
   useEffect(() => {
     getLogDirPath().then(setLogDir).catch(() => {});
+    getConfigFilePath().then(setConfigFile).catch(() => {});
   }, []);
 
   const handleAuthEnabledChange = useCallback((enabled: boolean) => {
@@ -91,6 +80,16 @@ export function Setting({ config, disabled, onChange, onReset }: SettingProps) {
     }
   }, [logDir]);
 
+  const openConfigFile = useCallback(async () => {
+    if (!configFile) return;
+    try {
+      const mod = await import("@tauri-apps/plugin-opener");
+      await mod.revealItemInDir(configFile);
+    } catch (e) {
+      console.error("打开目录失败:", e);
+    }
+  }, [configFile]);
+
   const browseBinaryDir = useCallback(async () => {
     const selected = await open({ directory: true, multiple: false });
     if (selected && typeof selected === "string") {
@@ -114,26 +113,26 @@ export function Setting({ config, disabled, onChange, onReset }: SettingProps) {
         <div className="px-4 py-2.5 border-b border-[var(--color-border)] flex items-center justify-between transition-colors hover:bg-[var(--color-bg-hover)]">
           <div className="text-xs font-medium">{t("settings.themeMode")}</div>
           <Select
-            value={setting}
+            value={config.theme}
             options={[
               { value: "system", label: t("settings.themeSystem") },
               { value: "light", label: t("settings.themeLight") },
               { value: "dark", label: t("settings.themeDark") },
             ]}
-            onChange={(v) => setTheme(v as ThemeSetting)}
+            onChange={(v) => onChange("theme", v)}
           />
         </div>
         <div className="px-4 py-2.5 flex items-center justify-between transition-colors hover:bg-[var(--color-bg-hover)]">
           <div className="text-xs font-medium">{t("settings.language")}</div>
           <Select
-            value={lang}
+            value={config.lang}
             options={[
               { value: "system", label: t("settings.langSystem") },
               { value: "zh", label: t("settings.langZh") },
               { value: "en", label: "English" },
             ]}
             onChange={(v) => {
-              setLang(v);
+              onChange("lang", v);
               let lng = v;
               if (v === "zh") lng = "zh-CN";
               if (v === "system") lng = navigator.language.startsWith("zh") ? "zh-CN" : "en";
@@ -299,12 +298,18 @@ export function Setting({ config, disabled, onChange, onReset }: SettingProps) {
         </div>
       </SettingBox>
 
-      {/* 日志 */}
+      {/* 配置和日志文件 */}
       <SettingBox title={t("settings.logs")}>
+        <div className="px-4 py-2.5 border-b border-[var(--color-border)] flex items-center justify-between transition-colors hover:bg-[var(--color-bg-hover)]">
+          <div className="text-xs font-medium">{t("settings.configDir")}</div>
+          <Button onClick={openConfigFile} disabled={!configFile}>
+            {t("settings.openConfigDir")}
+          </Button>
+        </div>
         <div className="px-4 py-2.5 flex items-center justify-between transition-colors hover:bg-[var(--color-bg-hover)]">
           <div className="text-xs font-medium">{t("settings.logDir")}</div>
-          <Button onClick={openLogDir} disabled={disabled || !logDir}>
-            {t("settings.openDir")}
+          <Button onClick={openLogDir} disabled={!logDir}>
+            {t("settings.openLogDir")}
           </Button>
         </div>
       </SettingBox>

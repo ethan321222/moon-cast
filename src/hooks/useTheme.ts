@@ -40,10 +40,10 @@ function applyTheme(setting: ThemeSetting) {
   window.dispatchEvent(new Event("theme-change"));
 }
 
-/** 从 localStorage 初始化，在 App 顶层调用一次 */
-export function initTheme() {
-  const saved = (localStorage.getItem(STORAGE_KEY) as ThemeSetting) || "system";
-  applyTheme(saved);
+/** 初始化主题（由外部配置驱动） */
+export function initTheme(setting?: ThemeSetting) {
+  const theme = setting || "system";
+  applyTheme(theme);
 }
 
 /** 读写 + 切换主题，任意组件可调用，跨组件自动同步 */

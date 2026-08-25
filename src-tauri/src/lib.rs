@@ -25,6 +25,10 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            ipc::config::load_app_config,
+            ipc::config::save_app_config,
+            ipc::config::get_app_status,
+            ipc::config::get_config_file_path,
             ipc::server::start_server,
             ipc::server::stop_server,
             ipc::server::get_server_status,

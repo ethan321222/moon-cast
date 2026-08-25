@@ -1,16 +1,15 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import type { ServerConfig } from "@/types";
+import type { AppConfig, ServerConfig } from "@/types";
 import { QrModal } from "@/components/modal-qr";
 import { Menu } from "@/components/menu";
 import type { ItemType } from "@/components/menu";
 import { Button } from "@/components/button";
 import { useTheme, initTheme } from "@/hooks/useTheme";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useServerLifecycle } from "./hooks/useServerLifecycle";
 import { Dashboard } from "./dashboard";
 import { Setting } from "./setting";
-import { getDesktopPath, getAppDataBinPath } from "@/api/client";
+import { loadAppConfig, saveAppConfig, getDesktopPath, getAppDataBinPath } from "@/api/client";
 
 type Page = "overview" | "config";
 
@@ -42,7 +41,7 @@ const ICON_MAP: { [K in Page]: React.ReactNode } = {
 
 // ---- Default Config ----
 
-const DEFAULT_CONFIG: ServerConfig = {
+const DEFAULT_CONFIG: AppConfig = {
   root: "",
   bind: "0.0.0.0",
   port: 8080,
@@ -55,6 +54,8 @@ const DEFAULT_CONFIG: ServerConfig = {
   auth_pass: null,
   tunnel_enabled: false,
   tunnel_bin: null,
+  theme: "system",
+  lang: "system",
 };
 
 // ---- Component ----
@@ -62,13 +63,18 @@ const DEFAULT_CONFIG: ServerConfig = {
 export default function Control() {
   const { t } = useTranslation("control");
   const [activePage, setActivePage] = useState<Page>("overview");
-  const [storedConfig, setConfig] = useLocalStorage<ServerConfig>("mooncast-config", {
-    defaultValue: DEFAULT_CONFIG,
-  });
-  const config = storedConfig ?? DEFAULT_CONFIG;
+  const [config, setConfigState] = useState<AppConfig>(DEFAULT_CONFIG);
+  const [configLoaded, setConfigLoaded] = useState(false);
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [qrUrl, setQrUrl] = useState<string | null>(null);
-  const { toggleTheme } = useTheme();
+  const { setTheme, toggleTheme } = useTheme();
+
+  // Extract ServerConfig subset for server lifecycle
+  const serverConfig: ServerConfig = useMemo(() => {
+    const { theme: _t, lang: _l, ...server } = config;
+    return server;
+  }, [config]);
 
   const {
     status,
@@ -78,11 +84,23 @@ export default function Control() {
     logs,
     start,
     stop,
-  } = useServerLifecycle({ config });
+  } = useServerLifecycle({ config: serverConfig });
 
+  // Load persisted config on mount
   useEffect(() => {
-    initTheme();
+    loadAppConfig()
+      .then((saved) => {
+        setConfigState(saved);
+        setConfigLoaded(true);
+      })
+      .catch(() => setConfigLoaded(true));
   }, []);
+
+  // Apply theme from config once loaded
+  useEffect(() => {
+    if (!configLoaded) return;
+    initTheme(config.theme as "system" | "light" | "dark");
+  }, [configLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleServer = useCallback(async () => {
     if (status?.running) {
@@ -92,32 +110,44 @@ export default function Control() {
     }
   }, [status?.running, start, stop]);
 
+  // Debounced persist to disk
+  const persistConfig = useCallback((next: AppConfig) => {
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      saveAppConfig(next).catch(() => {});
+    }, 300);
+  }, []);
+
   const handleConfigChange = useCallback(
-    (field: keyof ServerConfig, value: unknown) => {
-      setConfig((prev) => ({ ...(prev ?? DEFAULT_CONFIG), [field]: value }));
+    (field: keyof AppConfig, value: unknown) => {
+      setConfigState((prev) => {
+        const next = { ...prev, [field]: value };
+        persistConfig(next);
+        // Apply theme immediately when changed
+        if (field === "theme") {
+          setTheme(value as "system" | "light" | "dark");
+        }
+        return next;
+      });
     },
-    [setConfig],
+    [persistConfig, setTheme],
   );
 
-  // 首次启动时，从系统获取桌面路径作为 root 默认值
+  // Fill default root from system desktop on first run
   useEffect(() => {
-    if (config.root) return;
+    if (!configLoaded || config.root) return;
     getDesktopPath()
-      .then((desktop) => {
-        handleConfigChange("root", desktop);
-      })
+      .then((desktop) => handleConfigChange("root", desktop))
       .catch(() => {});
-  }, [config.root, handleConfigChange]);
+  }, [configLoaded, config.root, handleConfigChange]);
 
-  // 首次启动或重置后，设置 cloudflared 默认路径
+  // Fill default tunnel binary path on first run
   useEffect(() => {
-    if (config.tunnel_bin) return;
+    if (!configLoaded || config.tunnel_bin) return;
     getAppDataBinPath()
-      .then((binPath) => {
-        handleConfigChange("tunnel_bin", binPath);
-      })
+      .then((binPath) => handleConfigChange("tunnel_bin", binPath))
       .catch(() => {});
-  }, [config.tunnel_bin, handleConfigChange]);
+  }, [configLoaded, config.tunnel_bin, handleConfigChange]);
 
   // PLACEHOLDER_RENDER
 
@@ -208,7 +238,11 @@ export default function Control() {
             config={config}
             disabled={!!status?.running}
             onChange={handleConfigChange}
-            onReset={() => setConfig(DEFAULT_CONFIG)}
+            onReset={() => {
+              setConfigState(DEFAULT_CONFIG);
+              persistConfig(DEFAULT_CONFIG);
+              setTheme("system");
+            }}
           />
         )}
       </main>
